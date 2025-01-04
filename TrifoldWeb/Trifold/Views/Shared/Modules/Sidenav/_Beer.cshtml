@@ -1,0 +1,32 @@
+﻿@model Trifold.Models.UserSideNavModel
+
+<li class="sidenav-item@(Model.CurrentPage.Contains("/Beer/") ? " active open" : "")">
+	<a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+		<i class="sidenav-icon fas fa-beer"></i>
+		<div>Beers</div>
+	</a>
+
+	<ul class="sidenav-menu">
+		<li class="sidenav-item@(Model.CurrentPage.Contains("/Beer/List") ? " active" : "")">
+			<a href="/@Model.EventId/Beer/List" class="sidenav-link">
+				<div>Beer List</div>
+			</a>
+		</li>
+		<li class="sidenav-item@(Model.CurrentPage.Contains("/Beer/Add") ? " active" : "")">
+			<a href="/@Model.EventId/Beer/Add" class="sidenav-link">
+				<div>Add Beers</div>
+			</a>
+		</li>
+		<li class="sidenav-item@(Model.CurrentPage.Contains("/Beer/Breweries") ? " active" : "")">
+			<a href="/@Model.EventId/Beer/Breweries" class="sidenav-link">
+				<div>Breweries</div>
+			</a>
+		</li>
+		<li class="sidenav-item@(Model.CurrentPage.Contains("/Beer/Import") ? " active" : "")">
+			<a href="/@Model.EventId/Beer/Import" class="sidenav-link">
+				<div>CSV Import</div>
+			</a>
+		</li>
+		
+	</ul>
+</li>

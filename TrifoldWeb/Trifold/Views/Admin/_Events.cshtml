@@ -1,0 +1,98 @@
+﻿@model Trifold.Models.Events
+<form method="post">
+	@*<div class="form-group">
+			<label class="form-label"></label>
+			<input class="form-control" asp-for="" />
+		</div>*@
+
+	<div class="form-check" style="margin-bottom: 20px">
+		<input type="checkbox" class="form-check-input" asp-for="IsActive" checked>
+		<label class="form-check-label" for="IsActive">Active</label>
+	</div>
+	<div class="form-group">
+		<label class="form-label">Promoter</label>
+		<select class="form-control" id="select-promoter" asp-for="EventPromoterId" asp-items="ViewBag.Promoters"></select>
+	</div>
+	<div class="form-group">
+		<label class="form-label">Event Name</label>
+		<input class="form-control" asp-for="EventName" />
+	</div>
+	<div class="form-group">
+		<label class="form-label">Address</label>
+		<input class="form-control" asp-for="EventAddress" />
+	</div>
+	<div class="form-group">
+		<label class="form-label">City</label>
+		<input class="form-control" asp-for="EventCity" />
+	</div>
+	<div class="form-group">
+		<label class="form-label">State</label>
+		<input class="form-control" asp-for="EventState" />
+	</div>
+	<div class="form-group">
+		<label class="form-label">Zip</label>
+		<input class="form-control" asp-for="EventZip" />
+	</div>
+	<div class="form-group">
+		<label class="form-label">Event Start Time</label>
+		<input class="form-control datetimepicker-input" type="text" autocomplete="off" data-toggle="datetimepicker" data-target="#EventStartTime" asp-for="EventStartTime" />
+	</div>
+	<div class="form-group">
+		<label class="form-label">Event End Time</label>
+		<input class="form-control datetimepicker-input" type="text" autocomplete="off" data-toggle="datetimepicker" data-target="#EventEndTime" asp-for="EventEndTime" />
+	</div>
+	<div class="form-group">
+		<label class="control-label" for="timezone">Time Zone</label>
+		<select class="form-control" id="timezone" asp-for="TimeZone">
+			<option value="EST">Eastern</option>
+			<option value="CST">Central</option>
+			<option value="MST">Mountain</option>
+			<option value="PST">Pacific</option>
+			<option value="AKST">Alaska</option>
+			<option value="HST">Hawaii</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label class="control-label">Foursquare ID</label>
+		<input type="text" class="form-control" asp-for="FoursquareId">
+	</div>
+	<div class="form-group">
+		<label class="control-label">Latitude</label>
+		<input type="text" class="form-control" asp-for="Latitude">
+	</div>
+	<div class="form-group">
+		<label class="control-label">Longitude</label>
+		<input type="text" class="form-control" asp-for="Longitude">
+	</div>
+	<div class="form-group">
+		<label class="form-label">Event Website</label>
+		<input class="form-control" asp-for="EventUrl" />
+	</div>
+
+	<div id="modules" style="margin-bottom: 20px;">
+		<div class="col">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="@((int)ModuleEnum.Beer)" checked="@Model.Modules.Where(x => x.ModuleId == ModuleEnum.Beer).Any()" name="SelectedModules">
+				<label class="form-check-label">
+					Beer
+				</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="@((int)ModuleEnum.Map)" checked="@Model.Modules.Where(x => x.ModuleId == ModuleEnum.Map).Any()" name="SelectedModules">
+				<label class="form-check-label">
+					Map
+				</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="@((int)ModuleEnum.Custom)" checked="@Model.Modules.Where(x => x.ModuleId == ModuleEnum.Custom).Any()" name="SelectedModules">
+				<label class="form-check-label">
+					Custom Content
+				</label>
+			</div>
+		</div>
+	</div>
+
+
+	<button class="btn btn-primary" type="submit">Submit</button>
+</form>
+

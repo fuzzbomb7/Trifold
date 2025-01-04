@@ -1,0 +1,22 @@
+﻿@model Events
+
+<div class="card">
+	<h5 class="card-header"><i class="fas fa-mobile-alt mr-1"></i> App Configuration</h5>
+	<div class="card-body">
+		@if(string.IsNullOrWhiteSpace(Model.EventImageUrl) || string.IsNullOrWhiteSpace(Model.Promotion?.PromoUrl))
+		{
+			<p class="font-weight-bold">Status: <span class="text-danger">Incomplete</span></p>
+			<span>
+				App configuration not completed. 
+				@if (string.IsNullOrWhiteSpace(Model.EventImageUrl)) { <text>Customize your app colors and upload an event logo. </text> }
+				@if (string.IsNullOrWhiteSpace(Model.Promotion?.PromoUrl)) { <text>Specify a promotional URL. </text> }
+			</span>
+		}
+        else
+		{
+			<p class="font-weight-bold">Status: <span class="text-success">Complete</span></p>
+			<span>App configuration completed.</span>
+		}
+	</div>
+	<div class="card-footer"><a class="btn btn-primary" href="/Mobile/Config?eventId=@ViewData["EventId"]">App Configuration</a></div>
+</div>

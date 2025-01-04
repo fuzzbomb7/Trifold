@@ -1,0 +1,64 @@
+﻿@model Trifold.Models.Events
+@{
+    ViewData["Title"] = "Event";
+	int cards = 0;
+}
+
+<div class="col-xl-10">
+	<div class="card">
+		<h4 class="card-header">@Model.EventName</h4>
+		<div class="card-body">
+            @{
+                string icon = "fa-check-circle";
+                string color = "green";
+                string title = "Mobile data is up-to-date";
+                string textClass = "text-success";
+
+                if ((bool)ViewData["DirtyData"] == true)
+                {
+                    icon = "fa-exclamation-circle";
+                    color = "red";
+                    title = "Mobile data is out-of-date";
+                    textClass = "text-danger";
+                }
+
+                <div class="float-right"><a href="/@ViewData["EventId"]/Mobile/Publish"><span class="@textClass mr-1">@title</span><i class="dirty-data fas @icon" style="color: @color; position: relative; top: 1px;"></i></a></div>
+            }
+			<h5 class="card-title">@Model.EventStartTime.ToString("f")</h5>
+			<h6 class="card-subtitle text-muted mb-4">@Model.EventAddress, @Model.EventCity, @Model.EventState</h6>
+
+			<!--Modules-->
+			<div class="card-deck">
+				@foreach (var mod in Model.Modules)
+				{
+					// Add module partials as necessary
+					if (mod.ModuleId == ModuleEnum.Beer)
+					{
+						<partial name="Partials/_Beer" model="mod.Data" />
+						cards++;
+					}
+					else if (mod.ModuleId == ModuleEnum.Map)
+					{
+						<partial name="Partials/_Map" model="mod.Data" />
+						cards++;
+					}
+                    else if (mod.ModuleId == ModuleEnum.Custom)
+					{
+						<partial name="Partials/_Custom" model="mod.Data" />
+						cards++;
+					}
+
+					if (cards % 2 == 0)
+					{
+					@:</div>
+					@:<div class="card-deck mt-4">
+					}                    
+				}
+
+                <partial name="Partials/_Config" model="Model" />
+
+			</div>
+
+		</div>
+	</div>
+</div>

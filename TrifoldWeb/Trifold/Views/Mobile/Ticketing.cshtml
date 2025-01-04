@@ -1,0 +1,74 @@
+﻿@model Trifold.Models.Ticketing
+
+@{
+    ViewData["Title"] = "Ticketing";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+}
+
+<div class="card">
+    <h4 class="card-header">@ViewData["Title"]</h4>
+    <div class="card-body">
+
+        <p>Sell tickets to your event directly through the app! Enter the date range that your tickets are available for sale, and the URL where they can be purchased.</p>
+
+        <form method="post">
+            <input asp-for="EventId" hidden />
+            <input asp-for="Id" hidden />
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="text-danger mb-3">@ViewBag.Error</div>
+            }
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Ticket Sales Start Date</label>
+                    <input name="StartDate" id="StartDate" class="form-control datetimepicker-input" type="text" autocomplete="off" data-toggle="datetimepicker" data-target="#StartDate" />
+                </div>
+                <div class="col">
+                    <label class="form-label">Ticket Sales End Date</label>
+                    <input name="EndDate" id="EndDate" class="form-control datetimepicker-input" type="text" autocomplete="off" data-toggle="datetimepicker" data-target="#EndDate" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Ticket Sales URL</label>
+                <input asp-for="TicketUrl" class="form-control" />
+                <small class="form-text text-muted"></small>
+            </div>
+
+            <label class="form-label">If your event sells out, return to this page and check the box below</label>
+            <div class="form-check mb-4">
+                <input type="checkbox" class="form-check-input" asp-for="SoldOut">
+                <label class="form-check-label">Event is Sold Out</label>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/vendor/libs/moment/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.datetimepicker-input').datetimepicker({
+				sideBySide: true,
+                stepping: 30
+            });
+
+            $('#StartDate').datetimepicker('date', '@Model.StartDate');
+            $('#EndDate').datetimepicker('date', '@Model.EndDate');
+        });
+    </script>
+}
+
+
+

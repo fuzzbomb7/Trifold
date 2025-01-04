@@ -1,0 +1,130 @@
+﻿@model Maps
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+	<title>Map</title>
+	<link rel="stylesheet" href="~/css/leaflet.css" />
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		html, body, #map {
+			height: 100%;
+			width: 100vw;
+		}
+	</style>
+</head>
+<body>
+
+
+	<div id="map"></div>
+
+	<script src="~/js/leaflet.js"></script>
+	<script>
+		// Map
+		var zoomIncrement = 0.5;
+
+		var fixedIcon = L.icon({
+			iconUrl: '/css/images/blue-marker.png',
+			iconSize: [48, 48],
+			iconAnchor: [23, 44],
+			popupAnchor: [0, -39],
+		});
+
+		var map = L.map('map', {
+			crs: L.CRS.Simple,
+			attributionControl: false,
+			zoomDelta: zoomIncrement,
+			zoomSnap: zoomIncrement
+		});
+
+		var mapX = @Model.Width;
+		var mapY = @Model.Height;
+		var bounds = [[0, 0], [mapY, mapX]];
+		var image = L.imageOverlay('@Model.MapPath', bounds).addTo(map);
+		map.setMaxBounds(bounds);
+
+		// Set max/min zoom
+		var mapLargestSide = 0;
+		var windowLargestSide = 0;
+		var windowSize = map.getSize();
+
+		if (mapX >= mapY) {
+			mapLargestSide = mapX;
+			windowLargestSide = windowSize.x;
+		} else {
+			mapLargestSide = mapY;
+			windowLargestSide = windowSize.y;
+		}
+
+		var zoomMult = Math.floor(mapLargestSide / windowLargestSide) + 1;
+		var maxZoom = zoomMult * zoomIncrement;
+
+		map.setMinZoom(-maxZoom);
+		map.setMaxZoom(maxZoom);
+		map.fitBounds(bounds);
+
+		// Marker layer group
+		var markers = L.layerGroup().addTo(map);
+
+		// Place marker
+		loadMarker();
+		window.onhashchange = loadMarker;
+
+		// Functions
+		function loadMarker() {
+			var marker = scrapeHash();
+			createMarker(marker);
+		}
+
+		function createMarker(markerData) {
+			markers.clearLayers();
+			var viewMarker = L.marker([markerData.y, markerData.x], { icon: fixedIcon });
+			viewMarker.bindPopup(markerData.loc);
+			markers.addLayer(viewMarker);
+			viewMarker.openPopup();
+			map.setView([markerData.y, markerData.x], 0);
+		}
+
+		function scrapeHash() {
+
+			class markerData {
+				constructor(x, y, loc) {
+					this.x = x;
+					this.y = y;
+					this.loc = loc;
+				}
+			}
+
+			var hash = window.location.hash.substr(1);
+
+			var params = hash.split('&').reduce(function (result, item) {
+				var parts = item.split('=');
+				result[parts[0]] = parts[1];
+				return result;
+			}, {});
+
+			var x = params["x"];
+			var y = params["y"];
+            var loc = decodeURIComponent(params["loc"]);
+			var marker = new markerData(x, y, loc);
+			return marker;
+		}
+
+		
+
+	</script>
+</body>
+</html>
+
+
+
+

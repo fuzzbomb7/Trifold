@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trifold", "Trifold\Trifold.csproj", "{F0173462-4B6D-42E0-8B08-2878074D739A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrifoldTest", "TrifoldTest\TrifoldTest.csproj", "{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugProd|Any CPU = DebugProd|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0173462-4B6D-42E0-8B08-2878074D739A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0173462-4B6D-42E0-8B08-2878074D739A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0173462-4B6D-42E0-8B08-2878074D739A}.DebugProd|Any CPU.ActiveCfg = DebugProd|Any CPU
+		{F0173462-4B6D-42E0-8B08-2878074D739A}.DebugProd|Any CPU.Build.0 = DebugProd|Any CPU
+		{F0173462-4B6D-42E0-8B08-2878074D739A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0173462-4B6D-42E0-8B08-2878074D739A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}.DebugProd|Any CPU.ActiveCfg = DebugProd|Any CPU
+		{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}.DebugProd|Any CPU.Build.0 = DebugProd|Any CPU
+		{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD977A91-E9E5-4469-9582-91E0E7A0A0DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D07FEB1D-A228-41C4-AB04-B2629E090F0E}
+	EndGlobalSection
+EndGlobal

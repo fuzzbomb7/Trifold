@@ -1,0 +1,305 @@
+﻿@model Trifold.Models.MobileConfigModel
+
+@{
+    ViewData["Title"] = "Mobile App Configuration";
+
+    string defaultColor = "#ffe57f";
+    string defaultSecondaryColor = "#ffab00";
+
+    string eventColor = Model.Event?.EventPrimaryColor;
+    if (eventColor == null) { eventColor = defaultColor; }
+    var eventContrast = Model.Event?.EventTextContrast ?? TextContrastEnum.Dark;
+    string eventTextColor = eventContrast == TextContrastEnum.Dark ? "#FFF" : "#000";
+
+    string secondaryEventColor = Model.Event?.EventSecondaryColor;
+    if (secondaryEventColor == null) { secondaryEventColor = defaultSecondaryColor; }
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.css" />
+	<style>
+		.info-hover {
+			color: #2b9fe2;
+			font-size: larger;
+			margin-left: 0.1rem;
+		}
+
+		.input-group-text {
+			 width: 3rem;
+		}
+
+		.dropzone, .dz-message {
+			padding: 0;
+		}
+
+		.default-style .dropzone {
+			border: 2px dashed rgba(239, 0, 0, 0.6);
+		}
+
+        .logo-thumb {
+            height: 200px;
+        }
+
+	</style>
+}
+
+
+<div>
+
+    @if (Model.Event != null)
+    {
+        <div class="col-xl-9 p-0">
+            <div class="card">
+                <h4 class="card-header">App Configuration (@Model.Event?.EventName)</h4>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <div class="form-group col-sm-8 col-md-6 col-lg-6 pl-0">
+                                <label class="form-label">Event Primary Color</label>
+                                <div class="input-group" id="event-color-group">
+                                    <div class="input-group-prepend" style="text-align: center">
+                                        <span class="input-group-text" id="primary-event-color" style="background-color: @eventColor; border: 1px solid @eventColor; width: 3rem; color: @eventTextColor; font-weight: 700; display: inline-block;">P</span>
+                                    </div>
+                                    <input type="text" class="form-control selected-color-hex" id="primary-event-color-input" value="@eventColor">
+                                </div>
+                                <small class="form-text text-muted">The color of the app bar, buttons and tabs.</small>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6 col-lg-6 pl-0">
+                                <label class="form-label">Event Secondary Color</label>
+                                <div class="input-group" id="event-color-group">
+                                    <div class="input-group-prepend" style="text-align: center">
+                                        <span class="input-group-text" id="secondary-event-color" style="background-color: @secondaryEventColor; border: 1px solid @secondaryEventColor; width: 3rem; font-weight: 700; display: inline-block;"></span>
+                                    </div>
+                                    <input type="text" class="form-control selected-color-hex" id="secondary-event-color-input" value="@secondaryEventColor">
+                                </div>
+                                <small class="form-text text-muted">A constrasting color for link text and accents.</small>
+                            </div>
+                            <button class="btn btn-primary mt-2" id="save-event-config" data-event-id="@Model.Event.Id" disabled>Save Changes</button>
+                        </div>
+                        <div class="col-sm-6 pl-2 pt-2">
+                            @if (Model.Event.EventImageUrl != null)
+                            {
+                                <div class="text-center">
+                                    <img src="@Model.Event.EventImageUrl" class="img-fluid" style="height: 150px" />
+                                    <div class="mt-4"><button class="btn btn-default upload-btn" id="event-splash-image">Change Logo Image</button></div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center">
+                                    <img src="/images/fest-logo-placeholder.png" class="mx-auto" />
+                                    <div class="mt-4"><button class="btn btn-default upload-btn" id="event-splash-image">Upload Logo Image</button></div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer"><div class="card-text">Upload your event logo and select custom colors that match your event branding. Changes are applied immediately upon saving.</div></div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="modal" id="color-picker" data-color-for="" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header color-test">
+        <h5 class="modal-title" id="color-picker-modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fas fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="text-center mb-3"><a href="https://material.io/design/color/" target="_blank" class="secondary-color-test font-weight-bold" style="font-size:larger">Material Design Color Specification</a></div>
+         <md-color-picker id="picker" color-margin="5" colors-per-row="7" color-size="64" default-tint="500" fixedMinHeight="true" palette="material-full" use-spectrum-picker="true" value="#ff9800"><md-color-picker> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link secondary-color-test font-weight-bold" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary color-test" id="choose-color">Choose Color</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="event-logo-upload" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload Event Logo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fas fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="dropzone" id="event-upload"></form>
+        <div class="text-center mt-3">Logo will be resized to a height of 320 pixels</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+@section Scripts {
+    <!-- https://github.com/BennyAlex/material-design-inspired-color-picker --> 
+	<script src="~/js/md-color-picker.js"></script>
+	<script src="~/vendor/libs/dropzone/dropzone.js"></script>
+
+	<script>
+
+		$(document).ready(function () {
+			$('.info-hover').tooltip();
+
+			// File upload
+			Dropzone.autoDiscover = false;
+
+			$('#event-upload').dropzone({
+				url: '/@Model.Event?.Id/Mobile/EventLogoUpload',
+				dictDefaultMessage: "Click or drop file to upload",
+                success: function (file, response) {
+                    var isDisabled = $('#save-event-config').prop('disabled');
+                    if (isDisabled == false) {
+                        saveEventChanges();
+                    }
+					else window.location.reload();
+				},
+				error: function (file, error, xhr) {
+					alert("An error has occurred. Please try again later.");
+					window.location.reload();
+				}
+            });
+
+            // Disable save changes buttons on page load
+            $('#save-event-config').prop('disabled', true);
+        });
+
+        // Color picker with color change event
+		var picker = document.getElementById('picker');
+
+		function colorChanged(event) {
+			var color = event.detail[0]; // get the color
+            picker.value = color;
+            var colorType = $('#color-picker').data('color-for');
+            if (colorType.includes('primary')) colorTest(color);
+            else $('.secondary-color-test').css('color', color);
+		}
+		picker.addEventListener('change', colorChanged)
+
+
+        // Enable save changes button on title change
+        $('#app-title').on('input', function () {
+            $('#save-app-config').prop('disabled', false);
+        });
+
+		// File upload modal
+		$('#event-splash-image').click(function () {
+			$('#event-logo-upload').modal('show');
+        });
+
+		// Save changes button(s)
+		$('#save-event-config').click(function () {
+            saveEventChanges();
+        });
+
+       
+        // Save event changes
+        function saveEventChanges() {
+            var color = $('#primary-event-color-input').val();
+            var contrast = colorTest(color);
+            var secondaryColor = $('#secondary-event-color-input').val();
+			var addToProst = $('#add-to-prost').val();
+            var id = $('#save-event-config').data('event-id');
+
+			$.post("/Mobile/SaveEventConfig", { color: color, eventId: id, addToProst: addToProst, contrast: contrast, secondaryColor: secondaryColor },
+				function (data, textStatus, jqXHR) {
+					if (data == true) {
+						window.location.reload();
+					} else {
+						alert("An error has occurred. Please try again later.");
+						window.location.reload();
+					}
+				},
+				"json"
+			);
+        }
+
+		// Pointer on color select input group
+        $('#primary-event-color').css('cursor', 'pointer');
+        $('#secondary-event-color').css('cursor', 'pointer');
+
+		// Trigger color picker modal
+        $('#primary-event-color').click(function () {
+			var color = $('#primary-event-color-input').val();
+			picker.value = color;
+            colorTest(color);
+            
+            color = $('#secondary-event-color-input').val();
+            $('.secondary-color-test').css('color', color);
+
+            $('#color-picker').data('color-for', 'event-primary');
+            $('#color-picker-modal-title').html("Choose Primary Color");
+			$('#color-picker').modal('show');
+        });
+
+        $('#secondary-event-color').click(function () {
+			var color = $('#secondary-event-color-input').val();
+            picker.value = color;
+            
+            color = $('#primary-event-color-input').val();
+            colorTest(color);
+
+            $('#color-picker').data('color-for', 'event-secondary');
+            $('#color-picker-modal-title').html("Choose Secondary Color");
+			$('#color-picker').modal('show');
+		});
+
+
+		// Choose color in modal
+		$('#choose-color').click(function () {
+            var color = picker.value;
+            
+			var colorType = $('#color-picker').data('color-for');
+
+            if (colorType == "event-primary") {
+				$('#primary-event-color-input').val(color);
+				$('#primary-event-color').css('background-color', color);
+                $('#primary-event-color').css('border', '1px solid ' + color);
+
+                var contrast = colorTest(color);
+                $('#primary-event-color').css('color', contrast == 'dark' ? '#fff' : '#000');
+                $('#save-event-config').prop('disabled', false);
+            }
+            else if (colorType == "event-secondary") {
+				$('#secondary-event-color-input').val(color);
+				$('#secondary-event-color').css('background-color', color);
+                $('#secondary-event-color').css('border', '1px solid ' + color);
+
+                $('#save-event-config').prop('disabled', false);
+			}
+
+			$('#color-picker').modal('hide');
+		});
+
+		// Color test (modal header)
+        function colorTest(color) {
+            var colorContrast;
+			if (colorPicker.colorIsLight(color, 160)) {
+                $('.color-test').css('color', '#000');
+                colorContrast = 'light';
+			}
+			else {
+                $('.color-test').css('color', '#fff');
+                colorContrast = 'dark';
+			}
+
+            $('.color-test').css('background-color', color);
+            return colorContrast;
+        }
+
+
+	</script>
+}

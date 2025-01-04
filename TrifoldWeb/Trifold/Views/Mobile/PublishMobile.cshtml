@@ -1,0 +1,54 @@
+﻿@model DateTime?
+@{
+    ViewData["Title"] = "Publish Event Data";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/vendor/libs/ladda/ladda.css" />
+}
+
+<div class="col-xl-8 col-lg-10 p-0">
+	<div class="card">
+		<h4 class="card-header">@ViewData["Title"]</h4>
+		<div class="card-body">
+			@if(ViewBag.Confirmation == true)
+			{
+				<div id="confirmation" class="text-success mb-3 font-weight-bold">Event data updated successfully!</div>
+			}
+			else if(ViewBag.Confirmation == false)
+			{
+				<div id="confirmation" class="text-danger mb-3 font-weight-bold">Error uploading event data. Please contact us for assistance.</div>
+			}
+
+			<p>Clicking the button below will publish your event data to our real-time database. You will need to do this at least once before your event, and any time you change your event data. Please ensure that all of your event data is correct and complete.</p>
+			<p>Upon a successful update, the data should be immediately viewable in the app.</p>
+			<div>
+				<form method="post"><button class="btn btn-primary ladda-button" type="submit" data-style="expand-right" id="publish"><span class="ladda-label">Publish Event Data</span></button></form>
+			</div>
+			<div class="mt-3">
+				@if (Model == null)
+				{
+					<span class="text-danger">No event data published yet</span>
+				}
+				else
+				{
+					<span class="text-primary">Last Updated: @Model</span>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/vendor/libs/spin/spin.js"></script>
+	<script src="~/vendor/libs/ladda/ladda.js"></script>
+	<script>
+		$(function () {
+			Ladda.bind('#publish');
+		});
+
+		/*$('#publish').click(function () {
+			l.start();
+		});*/
+	</script>
+}

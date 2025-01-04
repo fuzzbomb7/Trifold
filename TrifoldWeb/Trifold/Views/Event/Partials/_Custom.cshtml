@@ -1,0 +1,22 @@
+﻿@model Dictionary<string, dynamic>
+<div class="card">
+	<h5 class="card-header"><i class="fas fa-globe mr-1"></i> Custom Content</h5>
+	<div class="card-body">
+		@if (Model["ContentUrl"] == false && Model["ContentHtml"] == false)
+		{
+			<p class="font-weight-bold">Status: <span class="text-danger">No Content</span></p>
+			<span>No custom content has been specified. Enter a custom content URL or add your custom page content.</span>
+		}
+		else if(Model["ContentUrl"] == true)
+		{
+			<p class="font-weight-bold">Status: <span class="text-success">Content URL Specified</span></p>
+			<span>A content URL has been added. Ensure that it will render correctly in the mobile app.</span>
+		}
+        else if(Model["ContentHtml"] == true)
+		{
+			<p class="font-weight-bold">Status: <span class="text-success">Content HTML Specified</span></p>
+			<span>Custom page content has been added. Ensure that it will render correctly in the mobile app.</span>
+		}
+	</div>
+	<div class="card-footer"><a class="btn btn-primary" href="/@ViewData["EventId"]/Custom">Configure Custom Content</a></div>
+</div>

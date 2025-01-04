@@ -1,0 +1,32 @@
+﻿@{bool isHorizontal = ViewData["LayoutSidenavHorizontal"] != null && ViewData["LayoutSidenavHorizontal"].ToString() == "True";}
+@{string currentPage = $"/{ViewContext.RouteData.Values["controller"].ToString()}/{ViewContext.RouteData.Values["action"].ToString()}";}
+
+<!-- Layout sidenav -->
+<div id="layout-sidenav" class="@(isHorizontal ? "layout-sidenav-horizontal sidenav-horizontal container-p-x flex-grow-0" : "layout-sidenav sidenav-vertical") sidenav bg-dark">
+	<div class="app-brand center">
+		<span class="app-brand-logo">
+			<i class="far fa-map"></i>
+		</span>
+		<a href="@(User.IsInRole("Admin") ? "/Admin" : "/Events")" class="app-brand-text sidenav-text ml-2">trifold</a>
+	</div>
+	<div class="sidenav-divider mt-0"></div>
+	<ul class="sidenav-inner@(!isHorizontal ? " py-1" : "")">
+
+		@if (currentPage.Contains("Admin"))
+		{
+			@await Html.PartialAsync("Layouts/Partials/_SidenavAdmin", currentPage)
+		}
+		else
+		{
+			Trifold.Models.UserSideNavModel side = new UserSideNavModel();
+			side.CurrentPage = currentPage;
+			side.EventId = (int?)ViewData["EventId"];
+			side.Modules = ViewBag.Modules;
+			//side.WhiteLabelId = (int)ViewData["WhiteLabelId"];
+
+			@await Html.PartialAsync("Layouts/Partials/_SidenavUser", side)
+		}
+
+	</ul>
+</div>
+<!-- / Layout sidenav -->

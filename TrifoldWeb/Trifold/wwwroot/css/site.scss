@@ -1,0 +1,131 @@
+.default-style .sidenav .app-brand {
+	//height: 58px;
+	padding: 1rem 2rem;
+}
+
+.sidenav-vertical {
+	width: 12rem;
+}
+
+@media (min-width: 992px) {
+	.layout-fixed:not(.layout-collapsed) .layout-container {
+		padding-left: 12rem;
+	}
+}
+
+.sidenav-vertical .sidenav-inner > .sidenav-item {
+	width: 12rem;
+}
+
+.app-brand-logo {
+	font-size: 2.0em;
+	color: #da1111;
+}
+
+.app-brand-text {
+	font-size: 2.3em;
+	font-weight: 600;
+    //color: white;
+}
+
+@media (min-width: 992px) {
+	.container-fluid {
+		padding-left: 1.2rem;
+		padding-right: 1rem;
+	}
+}
+
+#promo-avatar {
+	color: #ef0000;
+}
+
+a.link {
+	color: #da0000;
+}
+
+a.link:hover {
+	color: #ba0000;
+}
+
+#event-name-link {
+	font-weight: 500;
+	font-size: 1rem;
+	padding-bottom: 0.1rem;
+	margin-right: 1rem;
+	color: #ef0000;
+}
+
+#event-name-link:hover {
+	color: #666;
+}
+
+.table-overflow {
+	overflow-x: auto;
+	margin-bottom: 10px;
+	//width: calc(100% - 30px)
+}
+
+#logo-link {
+	color: white;
+}
+
+.form-control {
+	border: 1px solid #ccc;
+}
+
+.card, .card-header, .card-footer {
+	border-color: #ddd;
+}
+
+#layout-navbar {
+	border-bottom: 1px solid #ddd;
+}
+
+.layout-footer {
+	border-top: 1px solid #ddd;
+}
+
+.table-bordered, .table-bordered th, .table-bordered td {
+	border-color: #ddd;
+}
+
+.required {
+	color: red;
+}
+
+input.error {
+	border: 1px solid red;
+}
+
+label.error {
+	color: red;
+	padding-top: 2px;
+}
+
+.card-body .file-info {
+	padding: 1rem;
+}
+
+.progress {
+	font-size: 0.6rem;
+}
+
+.dirty-data {
+    font-size: 1.1rem;
+}
+
+.select2-selection {
+    border: 1px solid #ccc !important;
+}
+
+.help-text {
+	margin-bottom: 5px;
+}
+
+.close {
+	font-size: 1.8rem;
+	padding: 0;
+	font-weight: 600;
+	margin-top: -5px;
+}
+

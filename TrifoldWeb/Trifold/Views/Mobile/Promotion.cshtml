@@ -1,0 +1,71 @@
+﻿@model PromotionModel
+
+@{
+    ViewData["Title"] = "App Promotion";
+}
+
+@section Styles {
+
+}
+
+    <div class="col-xl-10 p-0">
+        <div class="card">
+            <h4 class="card-header">@ViewData["Title"]</h4>
+            <div class="card-body">
+
+                <div class="mb-3">Specify a promotional URL below to create a redirect link for your web app. Share this link through social media, email and print to promote the app to your attendees. A QR code that links to your app will also be created.</div>
+
+                <form method="post">
+                    <input asp-for="EventId" hidden />
+
+
+                    <div class="form-group">
+                        <label class="form-label">Absolute URL</label>
+                        <br /><a href="https://trifold.app/prost/@Model.EventId">https://trifold.app/prost/@Model.EventId</a>
+                    </div>
+
+                    <label class="form-label">Promotional URL</label>
+                    <div class="form-inline">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">https://trifold.app/</span>
+                            </div>
+                            <input type="text" class="form-control" asp-for="PromoUrl">
+                        </div>
+
+                        <div class="ml-3">
+                            <a href="https://trifold.app/@Model.PromoUrl" target="_blank" class="btn-secondary btn @if (Model.PromoUrl == null) {<text>disabled</text>}">Preview</a>
+                        </div>
+                    </div>
+
+                    @if (ViewBag.UrlInUse == true)
+                    {<small class="form-text text-danger">The URL you have entered is already in use</small> }
+                    else
+                    { <small class="form-text text-muted">Enter a short, unique and easy-to-remember URL (e.g. https://trifold.app/beerfest)</small>}
+
+                    <button class="btn btn-primary mt-3" type="submit">Save</button>
+
+                </form>
+
+
+
+                @if (Model.QrUrl != null)
+                {
+                    <hr style="border-color: #ddd; margin-top: 25px" />
+                    <h5>QR Code</h5>
+                    <p>Use the QR code below to promote your web app in email or print media. Right-click the image below and select "Save image as.." to download:</p>
+
+                    <img src="@Model.QrUrl" width="300" />}
+
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+}

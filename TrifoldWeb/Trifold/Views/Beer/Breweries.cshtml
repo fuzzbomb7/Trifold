@@ -1,0 +1,258 @@
+﻿@model List<BreweryModel>
+@{
+	ViewData["Title"] = "Breweries";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+	<link rel="stylesheet" href="~/vendor/libs/toastr/toastr.css">
+	<link rel="stylesheet" href="~/vendor/libs/select2/select2.min.css" />
+}
+
+<div class="card">
+	<h4 class="card-header">@ViewData["Title"]</h4>
+	<div class="card-body">
+		<div class="alert alert-info alert-dismissible fade show">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="help-text">Check the <b>Breweries</b> table below to ensure that all breweries in your beer list are assigned to a pouring station, and that there are no duplicates.</div>
+			<div class="help-text"> Use the <b>Merge With...</b> button to merge all beers from a duplicate brewery with the correct one.</div>
+			<div>The <b>Assign Table</b> button will assign all beers from that brewery to the specified pouring station. To assign individual beers to a pouring station, see the <a href="@ViewData["EventId"]/Beer/List" class="link"><b>Beer List</b></a>. </div>
+			
+		</div>
+		<div id="spinner" class="text-center h1"></div>
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>Logo</th>
+					<th>Brewery</th>
+					<th>City</th>
+					<th># of Beers</th>
+					<th>Table #</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="merge-modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Merge Breweries</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>All beers from <span id="merge-brewery-name" style="font-weight: 600"></span> will be merged with the brewery selected below:</p>
+				<!--TODO-->
+				<select id="merge-breweries"></select>
+				<input hidden id="merge-brewery-id" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="save-merge-button">Merge</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="assign-modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Assign Table</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div>
+					<p>Specify a table number below to assign all beers from <span id="table-brewery-name" style="font-weight: 600"></span> to that pouring station.</p>
+				</div>
+				<div class="row">
+					<div class="form-group col">
+						<label class="form-label">Table Number</label>
+						<input class="form-control" type="number" min="1" id="table-number" />
+						<small class="form-text text-muted">Pouring stations are sorted in the app by table number</small>
+					</div>
+					<div class="form-group col">
+						<label class="form-label">Alternate Table Name</label>
+						<input class="form-control" id="table-name" />
+						<small class="form-text text-muted">If Alternate Table Name is not specified, "Table <i>n</i>" will be used</small>
+					</div>
+				</div>
+			</div>
+			<input hidden id="table-brewery-id" />
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" id="save-table-button">Save</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script src="~/vendor/libs/toastr/toastr.js"></script>
+    <script src="~/vendor/libs/select2/select2.js"></script>
+	<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/v2.0.0/dist/latest/bootstrap-autocomplete.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+	<script>
+
+		$(document).ready(function () {
+			// Toastr options
+			toastr.options.progressBar = true;
+			toastr.options.timeOut = 3000;
+			toastr.options.positionClass = 'toast-bottom-left';
+
+			$('#spinner').html('<i class="fas fa-spinner fa-spin"></i>');
+
+            table = $('#table').DataTable({
+                pageLength: 25,
+                autoWidth: false,
+                order: [[2, 'asc']],
+                ajax: {
+                    dataSrc: '',
+                    url: "/@ViewData["EventId"]/Beer/Breweries/Api/GetAll"
+                },
+                columns: [
+                    {
+                        data: 'breweryLogoUrl',
+                        render: function (data, type, row, meta) {
+                            if (data !== null) {
+                                return '<img src="' + data + '" height="50" />';
+                            } else {
+                                return '<img src="/images/beericon.png" height="50" />';
+                            }
+                        },
+                        orderable: false
+                    },
+                    { data: 'breweryName' },
+                    { data: 'breweryCity' },
+                    { data: 'numberOfBeers' },
+                    { data: 'tableNumbers' },
+					{
+                        data: 'breweryId',
+                        render: function (data, type, row, meta) {
+                            return '<div class="btn-group" role="group"><button class="btn btn-default assign-table" data-id="' + data + '" data-name="' + row.breweryName + '">Assign Table</button> <button class="btn btn-danger merge" data-id="' + data + '" data-name="' + row.breweryName + '">Merge With...</button></div>';
+                        },
+                        orderable: false
+                    }
+                ]
+            });
+
+            $('#table').parent().addClass('table-overflow');
+
+			// DataTables Ajax load event
+			table.on('xhr.dt', function (e, settings, json, xhr) {
+				$('#spinner').html("");
+            });
+
+        });
+
+		// Autocomplete table name
+        $('#table-number').change(function () {
+            $.get("/@ViewData["EventId"]/Beer/Location/Api/Name", { tableNumber: $(this).val() })
+				.done(function (data) {
+                    $('#table-name').val(data);
+				});
+        });
+
+		// Load assign table modal
+		$('#table').on('click', '.assign-table', function () {
+            var breweryId = $(this).data('id');
+			var breweryName = $(this).data('name');
+
+			$.get("/@ViewData["EventId"]/Beer/Breweries/Api/GetTable", { breweryId: breweryId },
+				function (data, textStatus, jqXHR) {
+                    $('#table-number').val(data.tableNumber);
+                    $('#table-name').val(data.alternateName);
+                    $('#table-brewery-id').val(breweryId);
+					$('#table-brewery-name').html(breweryName);
+					$('#assign-modal').modal('show');
+				},
+				"json"
+			);
+        });
+
+		// Save updated table
+		$("#save-table-button").click(function () {
+            $.post("/@ViewData["EventId"]/Beer/Breweries/Api/SetTable",
+                {
+                    breweryId: $('#table-brewery-id').val(),
+                    tableNumber: $('#table-number').val(),
+					tableName: $('#table-name').val()
+                },
+				function (data, textStatus, jqXHR) {
+                    $('#assign-modal').modal('hide');
+                    table.ajax.reload(null, false);
+					if (data === true) {
+						toastr.success("Table number updated successfully!", $('#table-brewery-name').html());
+						setDirty();
+					}
+                    else toastr.error("Problem updating table number", $('#table-brewery-name').html());
+				},
+				"json"
+			);
+        });
+
+		// Load merge brewery modal
+		$('#table').on('click', '.merge', function () {
+            var breweryId = $(this).data('id');
+            var breweryName = $(this).data('name');
+
+			$('#merge-brewery-id').val(breweryId);
+            $('#merge-brewery-name').html(breweryName);
+			$('#merge-modal').modal('show');
+        });
+
+		// Brewery select input
+		$('#merge-breweries').select2({
+            placeholder: 'Select a Brewery',
+			dropdownParent: $('#merge-modal'),
+			ajax: {
+                url: '/@ViewData["EventId"]/Beer/Breweries/Api/GetSelectList',
+                data: function (params) {
+                    var query = {
+                        q: params.term,
+						exclude: $('#merge-brewery-id').val()
+                    }
+                    return query;
+                }
+			}
+        });
+
+		// Clear brewery selection on modal close
+        $('#merge-modal').on('hidden.bs.modal', function (e) {
+            $('#merge-breweries').val(null).trigger('change');
+        });
+
+		// Merge breweries
+        $('#save-merge-button').click(function () {
+            var oldBreweryId = $('#merge-brewery-id').val();
+            var newBreweryId = $('#merge-breweries').find(':selected')[0].value;
+			var newBreweryName = $('#merge-breweries').find(':selected')[0].label;
+
+            $.post("/@ViewData["EventId"]/Beer/Breweries/Api/Merge", { oldBreweryId: oldBreweryId, newBreweryId: newBreweryId },
+				function (data, textStatus, jqXHR) {
+                    $('#merge-modal').modal('hide');
+                    table.ajax.reload(null, false);
+					if (data === true) {
+						toastr.success("Brewery merged successfully!", $('#merge-brewery-name').html());
+						setDirty();
+					}
+                    else toastr.error("Problem merging brewery", $('#merge-brewery-name').html());
+				},
+				"json"
+			);
+        });
+
+	</script>
+}

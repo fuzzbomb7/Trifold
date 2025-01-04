@@ -1,0 +1,74 @@
+﻿@model Trifold.Models.Apps
+
+@{
+	ViewData["Title"] = "Edit App";
+}
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"]</h3>
+	<div class="card-body">
+		<form method="post">
+			<div class="row">
+				<div class="col-sm-4 col-md-3 col-xl-2">
+					@{
+						string imgPath = "/images/splash-placeholder.png";
+						if (Model.SplashImageUrl != null) { imgPath = Model.SplashImageUrl; }
+					}
+					<img src="@imgPath" class="img-thumbnail" width="150" />
+
+                    @{
+						imgPath = "/images/app-icon-placeholder.png";
+						if (Model.AppIconUrl != null) { imgPath = Model.AppIconUrl; }
+					}
+					<img src="@imgPath" class="img-thumbnail mt-3" width="150" />
+				</div>
+				<div class="">
+					<h4 class="mb-0">@Model.AppName</h4>
+					<small class="text-muted">@Model.ApplicationId</small>
+
+					<input hidden asp-for="ApplicationId" />
+					<input hidden asp-for="AppName" />
+					<input hidden asp-for="Id" />
+					<input hidden asp-for="IsWhiteLabel" />
+					<input hidden asp-for="PrimaryColor" />
+					<input hidden asp-for="SplashImageUrl" />
+                    <input hidden asp-for="TextContrast" />
+                    <input hidden asp-for="SecondaryColor" />
+                    <input hidden asp-for="AppIconUrl" />
+
+					 <div class="form-group">
+                        <label class="form-label">Google Play URL</label>
+                        <input class="form-control" type="text" autocomplete="off" asp-for="AndroidAppStoreUrl" />
+                     </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Apple App Store URL</label>
+                        <input class="form-control" type="text" autocomplete="off" asp-for="iOSAppStoreUrl" />
+                     </div>
+                    
+                    <div class="form-check mt-3 mb-3">
+						@Html.CheckBoxFor(x => x.IsPublished, new { @class = "form-check-input" })
+						<label class="form-check-label">
+							App is built/published
+						</label>
+					</div>
+
+					@if (Model?.EventPromoters?.Count > 0)
+					{
+						<h5>Promoters</h5>
+						<ul class="list-unstyled ml-4">
+							@foreach (var pro in Model.EventPromoters)
+							{
+								<li><a href="/Admin/Promoters/Edit/@pro.Id" class="link">@pro.CompanyName</a></li>
+							}
+						</ul>
+					}
+
+					<button class="btn btn-primary" type="submit">Submit</button>
+				</div>
+			</div>
+
+			
+		</form>
+	</div>
+</div>

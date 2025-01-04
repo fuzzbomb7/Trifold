@@ -1,0 +1,196 @@
+﻿@model List<CsvFileUploads>
+@{
+	ViewData["Title"] = "CSV Import";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.css" />
+	<style>
+		.card {
+			margin-bottom: 20px;
+		}
+
+		#instructions {
+			position: relative;
+			height: 75vh;
+			padding-right: 1rem;
+		}
+
+		.default-style .dz-message {
+			font-size: 1rem;
+			margin: 2rem 0;
+		}
+
+		.dropzone, .dz-message {
+			padding: 0;
+		}
+
+		.dz-preview {
+			margin: 1rem;
+		}
+
+		.default-style .dropzone {
+			border: 2px dashed rgba(239, 0, 0, 0.6);
+		}
+	</style>
+}
+
+<div class="row">
+
+	<div class="col-md-4">
+		<div class="card">
+			<h5 class="card-header">Upload</h5>
+			<div class="card-body">
+				<form class="dropzone" id="csvUpload"></form>
+			</div>
+		</div>
+
+		<div class="card">
+			<h5 class="card-header">File Processing</h5>
+			<div class="card-body">
+				@foreach (var file in Model)
+				{
+					<div class="card">
+						<div class="card-body file-info">
+							<i class="far fa-file-alt float-left" style="font-size: 3.5rem;"></i>
+							<div style="margin-left: 4rem;">
+								<div>
+                                    <a href="#" class="link" style="font-weight: 500">@file.FileName</a>
+                                    @if (file.Progress == CsvFileProgress.Pending || file.Progress == CsvFileProgress.InProgress)
+                                    {<span class="float-right"><a href="#cancel" class="cancel-file-process" data-file-id="@file.Id">Cancel</a></span>}
+                                </div>
+								<div class="small font-weight-bold">@file.UploadDate</div>
+								@{
+									string progressText = "Pending";
+									string progressStyle = "text-warning";
+
+									if (@file.Progress == CsvFileProgress.Error)
+									{
+										progressText = "Error";
+										progressStyle = "text-danger";
+									}
+									else if (@file.Progress == CsvFileProgress.InProgress)
+									{
+										progressText = "In Progress";
+										progressStyle = "text-info";
+									}
+									else if (@file.Progress == CsvFileProgress.Completed)
+									{
+										progressText = "Completed";
+										progressStyle = "text-success";
+									}
+                                    else if (@file.Progress == CsvFileProgress.Canceled)
+									{
+										progressText = "Canceled";
+										progressStyle = "text-danger";
+									}
+								}
+								<div class="@progressStyle small font-weight-bold" style="margin-top: 0.1rem" >@progressText</div>
+								@if (file.Progress == CsvFileProgress.Completed || (file.Progress == CsvFileProgress.Canceled && file.Count.Completed > 0))
+								{
+									<div class="text-info" style="margin-top:0.2rem;"><a href="/@ViewData["EventId"]/Beer/ImportLog/@file.Id">View Log</a></div>
+								}
+							</div>
+							@if (file.Progress == CsvFileProgress.InProgress)
+							{
+								double percent = ((double)file.Count.Completed / file.Count.Total) * 100;
+								<div class="progress" style="margin-top:1rem;"><div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width: @percent%">@Math.Round(percent, 2) %</div></div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-8">
+		<div class="card">
+			<h4 class="card-header">@ViewData["Title"]</h4>
+			<div class="card-body" style="padding-right: 1rem">
+				<div id="instructions">
+					<p>The easiest way to import your beer list is to upload it as a CSV file. CSV files can be created in Excel or any spreadsheet editor. We recommend downloading our CSV template below for the best experience:</p>
+					<p style="text-align: center; "><a href="~/download/Beer CSV Template.csv" target="_blank" class="link"><b>Download Beer CSV Import Template</b></a></p>
+					<h4>Quick Start</h4>
+					<p>All you need to get started is a spreadsheet with two columns, <i>Brewery</i> and <i>Beer</i>. For each beer that you wish to import, enter the brewery name in the Brewery column, and the beer name in the Beer column. Save the spreadsheet as a CSV file, then drop your file in the Upload box to the left.</p>
+					<p style="text-align: center; ">
+						<img src="~/images/basic-beer-upload.png" class="img-fluid" /><br />
+						<span class="figure-caption text-center">A spreadsheet with the minumum required columns.</span>
+					</p>
+					<p>Depending on the number of beers in your beer list and the number of files in queue, it may take several hours for your file to process. You'll receive an email at your account email address once the file has finished processing. Once it's finished, return to this page and click the "View Log" link below your file to view the import log for upload errors.</p>
+					<p>Check your newly uploaded <a href="/@ViewData["EventId"]/Beer/List" class="link">Beer List</a> against your official festival beer list for errors and omissions. You can easily edit or delete incorrect entries on the Beer List page, and add new beers on the <a href="/@ViewData["EventId"]/Beer/Add" class="link">Add Beers</a> page.</p>
+					<h4>Untappd Integration</h4>
+					<p>We will process your CSV file against the Untappd database. This will automatically fill in beer and brewery details from Untappd, as well as allow festival attendees to check their beers into Untappd without leaving your app.</p>
+					<p>For each row in your CSV file, we will combine the brewery and beer name to search the Untappd database for that beer, adding the first result returned to your beer list. This may occasionally result in inaccurate entries, especially for beers with multiple releases.</p>
+					<p>To avoid this, you can pre-search for beers in Untappd, and specify the Untappd ID in the <i>UntappdId</i> column. (The Untappd ID is the number located at the end of the URL on that beer's page on the Untappd website.) You can also add beers manually on the <a href="/@ViewData["EventId"]/Beer/Add" class="link">Add Beers</a> page.</p>
+					
+                    <h5>Handling Rare &amp; Non-Beer Beverages</h5>
+					<p>If you know that a particular beverage is unlikely to be listed on Untappd (such as local limited release beers, canned cocktails and other alcoholic beverages), simply enter "SKIP" (or any non-numeric characters) in the <i>UntappdId</i> column. These pours will be added directly to your beer list. Otherwise, if the UntappdId column is left blank (or zero), we will search Untappd for that beverage.</p>
+					<p style="text-align: center; ">
+						<img src="~/images/untappd-id.png" class="img-fluid" /><br />
+						<span class="figure-caption text-center">We will search Untappd for the beer in row 1.<br /> We will use the specified Untappd ID for the beer in row 2.<br /> We will not use Untapped data for the beer in row 3, instead adding it to the beer list directly. </span>
+					</p>
+
+					<p>Due to Untappd API limits, please note that processing your CSV file with Untappd data may take several hours! Also, please note that many beers in Untappd will have incomplete information (missing ABV, IBU, etc.) You should manually check the imported beer list against your official beer list for errors and omissions, and correct them as necessary!</p>
+
+					<h4>CSV Import Columns</h4>
+					<p>
+						The naming of the column headers in your CSV file is very important, and must match the column names below. The headers must occupy the first row of your CSV file. The order of columns is not important, and any columns without a valid header will be ignored.
+						The <i>Brewery</i> and <i>Beer</i> columns are required. If you are not pulling Untappd data for a particular beverage, please fill out the remaining columns, or else that information will be missing from your beer list.
+					</p>
+					<p style="text-align: center; ">
+						<img src="~/images/beer-csv-template.png" class="img-fluid" /><br /> 
+						<span class="figure-caption">The column headers from our CSV beer import template</span>
+					</p>
+					<h5>Brewery (required)</h5>
+					<p>The name of the brewery. Please ensure that the spelling, capitalization and punctuation of individual brewery names are consistent throughout your CSV file.</p>
+					<h5>Beer (required)</h5>
+					<p>The name of the beer. If using Untappd integration, we will combine the brewery and beer columns to search the Untappd database for that beer.</p>
+					<h5>UntappdId</h5>
+					<p>If specified, the Untappd ID will be used to pull the data for this particular beer from Untappd. To skip the Untappd search and add a beer directly to your beer list, enter SKIP (or any non-numeric characters) in this column. Otherwise, leave blank or zero.</p>
+					<h5>City</h5>
+					<p>The city and state where the brewery is located (e.g. "Nashville, TN"). Can be omitted if using Untappd integration.</p>
+					<h5>Style</h5>
+					<p>The style of the beer. Can be omitted if using Untappd integration.</p>
+					<h5>ABV</h5>
+					<p>The ABV of the beer, as a decimal number (e.g. "5.4"). Percent symbols will be stripped out. Can be omitted if using Untappd integration, although the value may be missing from Untappd. Any positive value in this field will override the value pulled from Untappd.</p>
+					<h5>IBU</h5>
+					<p>The IBU of the beer, as a whole number. Can be omitted if using Untappd integration, although the value may be missing from Untappd. Any positive value in this field will override the value pulled from Untappd.</p>
+					<h5>Description</h5>
+					<p>A text description of the beer. Can be omitted if using Untappd integration, although the value may be missing from Untappd. Any value in this field will override the value pulled from Untappd.</p>
+					<h5>Table</h5>
+					<p>The table number of the pouring station. If table number is not specified, the beer will be listed alphabetically in the app.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/vendor/libs/dropzone/dropzone.js"></script>
+	<script>
+		$(document).ready(function () {
+			Dropzone.options.csvUpload = false;
+			var upload = $('form#csvUpload').dropzone({
+				url: '/@ViewData["EventId"]/Beer/Upload',
+				dictDefaultMessage: "Click or drop file to upload",
+				success: function (file, response) {
+					window.location.reload();
+				},
+				error: function (file, error, xhr) {
+					alert("Could not upload the file. Please check that the file is formatted correctly and that the required Beer and Brewery columns are present.");
+					window.location.reload();
+				}
+			});
+			const ps = new PerfectScrollbar('#instructions');
+        });
+
+        $('a.cancel-file-process').click(function () {
+            var id = $(this).data('file-id');
+
+            $.post("/@ViewData["EventId"]/Beer/CancelFileProcessing", { csvUploadId: id })
+                .done(function (data) {
+                    window.location.reload();
+                });
+        });
+	</script>
+}

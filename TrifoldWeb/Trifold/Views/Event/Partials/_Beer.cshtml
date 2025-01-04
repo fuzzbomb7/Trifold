@@ -1,0 +1,26 @@
+﻿@model Dictionary<string, dynamic>
+<div class="card">
+	<h5 class="card-header"><i class="fas fa-beer mr-1"></i> Beer List</h5>
+	<div class="card-body">
+	@if (Model["BeerCount"] == 0)
+	{
+		<p class="font-weight-bold">Status: <span class="text-danger">No Beers Added</span></p>
+		<span>No beers added yet! Upload your beer list using CSV import.</span>
+		@:</div>
+		<div class="card-footer">
+			<a class="btn btn-primary" href="/@ViewData["EventId"]/Beer/Add">Add Beers</a>
+			<a class="btn btn-primary" href="/@ViewData["EventId"]/Beer/Import">CSV Import</a>
+		</div>
+	}
+	else
+	{
+		<p class="font-weight-bold">Status: <span class="text-success">Beers Added</span></p>
+		<span>Be sure to manually verify the accuracy of your beer list before your festival.</span>
+		@:</div>
+		<div class="card-footer">
+			<a class="btn btn-primary" href="/@ViewData["EventId"]/Beer/List">Beer List</a>
+			<a class="btn btn-primary" href="/@ViewData["EventId"]/Beer/Add">Add Beers</a>
+		</div>
+	}
+
+</div>

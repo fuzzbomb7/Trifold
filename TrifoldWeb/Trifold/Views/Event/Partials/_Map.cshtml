@@ -1,0 +1,27 @@
+﻿@model Dictionary<string, dynamic>
+<div class="card">
+	<h5 class="card-header"><i class="fas fa-map mr-1"></i> Map</h5>
+	<div class="card-body">
+		@if (Model["HasMap"] == false)
+		{
+			<p class="font-weight-bold">Status: <span class="text-danger">No Map Uploaded</span></p>
+			<span>You havent uploaded a map yet! Upload your event map and start placing markers.</span>
+		}
+		else if(Model["Unplaced"] == Model["Locations"])
+		{
+			<p class="font-weight-bold">Status: <span class="text-danger">No Markers Placed</span></p>
+			<span>Map uploaded, but no markers placed yet! Add your event data first, then add your map markers.</span>
+		}
+		else if(Model["Unplaced"] > 0)
+		{
+			<p class="font-weight-bold">Status: <span class="text-danger">Unplaced Markers</span></p>
+			<span>Add your event data first, then finish adding your map markers.</span>
+		}
+		else if(Model["Unplaced"] == 0 && Model["Locations"] > 0)
+		{
+			<p class="font-weight-bold">Status: <span class="text-success">All Markers Placed</span></p>
+			<span>Map uploaded, and all markers placed!</span>
+		}
+	</div>
+	<div class="card-footer"><a class="btn btn-primary" href="/@ViewData["EventId"]/Map">Configure Map</a></div>
+</div>

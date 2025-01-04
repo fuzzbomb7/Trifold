@@ -1,0 +1,528 @@
+﻿@{ Layout = null; }
+
+<!DOCTYPE html>
+
+<!-- Add landing-2 to html element -->
+<html lang="en" class="landing-2 default-style">
+<head>
+    <title>Trifold | Mobile Apps for Beer Festivals</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,400,500,600,700" rel="stylesheet">
+
+    <!-- Icon fonts -->
+    <link rel="stylesheet" href="/vendor/fonts/ionicons.css">
+    <link rel="stylesheet" href="/vendor/fonts/linearicons.css">
+
+    <!-- Core stylesheets -->
+    <link rel="stylesheet" href="/vendor/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
+    <link rel="stylesheet" href="/vendor/css/rtl/appwork.css" class="theme-settings-appwork-css">
+    <link rel="stylesheet" href="/vendor/css/rtl/theme-sunrise.css" class="theme-settings-theme-css">
+    <link rel="stylesheet" href="/vendor/css/rtl/colors.css" class="theme-settings-colors-css">
+    <link rel="stylesheet" href="/vendor/css/rtl/uikit.css">
+    <link rel="stylesheet" href="~/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="/vendor/js/material-ripple.js"></script>
+    <script src="/vendor/js/layout-helpers.js"></script>
+
+
+
+    <!-- Core scripts -->
+    <script src="/vendor/js/pace.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Page -->
+    <link rel="stylesheet" href="/css/landing.css">
+
+    <!-- Libs -->
+    <link rel="stylesheet" href="/vendor/libs/swiper/swiper.css">
+    <link rel="stylesheet" href="/vendor/libs/plyr/plyr.css">
+</head>
+
+<body>
+    <div class="page-loader">
+        <div class="bg-primary"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="landing-navbar navbar navbar-expand-lg navbar-dark fixed-top pt-lg-4 py-3">
+        <div class="container-fluid px-2">
+            <div class="app-brand center">
+                <span class="app-brand-logo pt-1">
+                    <i class="far fa-map"></i>
+                </span>
+                <span class="app-brand-text sidenav-text ml-2">trifold</span>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#landing-navbar-collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="landing-navbar-collapse">
+                <!--<div class="navbar-nav align-items-lg-center ml-lg-4">
+                    <a class="anchor-link nav-item nav-link" href="#features">Features</a>
+                </div>-->
+                <div class="navbar-nav align-items-lg-center ml-auto">
+                    <div class="nav-item py-2 py-lg-0 ml-lg-4">
+                        <a href="#" class="btn btn-outline-white rounded-pill borderless">Log In</a>
+                    </div>
+                    <div class="nav-item py-2 py-lg-0 ml-lg-1">
+                        <a href="#" class="btn btn-primary rounded-pill">Request Demo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- / Navbar -->
+    <!-- Header -->
+    <div class="jumbotron ui-hero ui-mh-100vh ui-bg-cover ui-bg-fixed ui-bg-overlay-container text-white" style="background-image: url('/images/4-glasses.jpg');">
+        <div class="ui-bg-overlay bg-dark opacity-50"></div>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-8 col-xl-6 text-md-left text-center my-5">
+                    <div class="display-3 text-expanded mb-2">Mobile Apps for</div>
+                    <div class="display-1 font-weight-bolder text-expanded">Beer Festivals</div>
+                    <div class="display-3 text-expanded mt-2 mb-4">of all sizes!</div>
+
+                    <a href="#" class="btn btn-lg rounded-pill btn-secondary mr-2">Request Demo</a>
+                    <a href="#" class="btn btn-lg rounded-pill btn-primary text-expanded">Download App</a>
+                </div>
+
+                <div class="col-md-4 col-xl-6 my-5">
+                    <div class="plyr__video-embed" id="player">
+                        <iframe src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1"
+                                allowfullscreen
+                                allowtransparency
+                                allow="autoplay"></iframe>
+                    </div>
+                    <!--<div class="ui-device iphone mw-100 mx-auto" style="width: 230px;">
+                        <div class="device-content">
+                            <img src="/images/app-phone.png" alt>
+                        </div>
+                        <img class="device-img" src="/images/iphone.png" alt>
+                    </div>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- / Header -->
+
+
+    <div class="landing-block container">
+        <h1 class="display-4 text-center mb-5">Mobile App Features</h1>
+
+        <div class="row text-center">
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="fa fas-beer"></span>
+                </div>
+                <h5>Beer List</h5>
+                <div class="ui-company-text text-muted">
+                    A searchable beer list with labels, style, description and ABV/IBU (when available).
+                </div>
+            </div>
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="lnr lnr-picture"></span>
+                </div>
+                <h5>Favorites List</h5>
+                <div class="ui-company-text text-muted">
+                    Save beers to try later at the tap of a button.
+                </div>
+            </div>
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="lnr lnr-calendar-full"></span>
+                </div>
+                <h5>Seach Beers</h5>
+                <div class="ui-company-text text-muted">
+                    Search by brewery, beer name or style
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="fa fas-beer"></span>
+                </div>
+                <h5>Untappd Integration</h5>
+                <div class="ui-company-text text-muted">
+                    Rate and check beers into Untappd without leaving the app!
+                </div>
+            </div>
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="lnr lnr-picture"></span>
+                </div>
+                <h5>Information</h5>
+                <div class="ui-company-text text-muted">
+                    Integrate an informational web page with sponsors, festival information, or just your festival website
+                </div>
+            </div>
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="lnr lnr-calendar-full"></span>
+                </div>
+                <h5>Festival Map</h5>
+                <div class="ui-company-text text-muted">
+                    Find out where a beer is being poured at the tap of a button
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="fa fas-beer"></span>
+                </div>
+                <h5>Engagement</h5>
+                <div class="ui-company-text text-muted">
+                    Prompt attendees to follow your social media accounts or join your email list.
+                </div>
+            </div>
+            <div class="col-md-4 my-4">
+                <div class="display-4 text-secondary mx-auto mb-4">
+                    <span class="lnr lnr-picture"></span>
+                </div>
+                <h5>Notifications</h5>
+                <div class="ui-company-text text-muted">
+                    Send notifications to your app’s users to inform them of upcoming events
+                </div>
+            </div>
+            <div class="col-md-4 my-4">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="landing-block container">
+        <div class="row align-items-center">
+
+            <div class="col-md-8 col-xl-6 text-md-left text-center">
+                <h1 class="display-4 mb-4">Prost! The Beer Festival App</h1>
+                <p class="ui-company-text text-muted my-5">
+                    Prost! aims to be the largest beer festival app, with events from across North America. Add your event to the Prost! app. 
+                    All you need to do is upload your event data and promote the app to your attendees.
+                </p>
+                <a href="#" class="btn rounded-pill btn-default md-btn-flat">Download</a>
+            </div>
+
+            <div class="col-md-4 col-xl-6 mt-5 mt-md-0">
+                <div class="ui-device iphone mw-100 mx-auto" style="width: 230px;">
+                    <div class="device-content">
+                        <img src="/images/app-phone.png" alt>
+                    </div>
+                    <img class="device-img" src="/images/iphone.png" alt>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row align-items-center">
+
+            <div class="col-md-4 col-xl-6 mt-5 mt-md-0">
+                <div class="ui-device iphone mw-100 mx-auto" style="width: 230px;">
+                    <div class="device-content">
+                        <img src="/images/app-phone.png" alt>
+                    </div>
+                    <img class="device-img" src="/images/iphone.png" alt>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-xl-6 text-md-left text-center">
+                <h1 class="display-4 mb-4">White-Label</h1>
+                <p class="ui-company-text text-muted my-5">
+                    Want full control over your branding and marketing? Our white-label app features your branding, your events, and is published under your company name. It also comes with
+                    additional features, such as the ability to send notifications to users.
+                </p>
+                <a href="#" class="btn rounded-pill btn-default md-btn-flat">Request A Demo</a>
+            </div>
+
+        </div>
+    </div>
+
+    <h1 class="display-4 text-center">Event Pricing</h1>
+    <div class="row no-gutters mb-5">
+        <div class="d-flex col-md flex-column ui-company-text text-center">
+            <div>Pricing is for a single, one-time event</div>
+        </div>
+    </div>
+    <div class="row no-gutters row-bordered text-center">
+
+        <div class="d-flex col-md flex-column py-4">
+            <h5 class="m-0">Sixth Barrel</h5>
+            <div class="flex-grow-1">
+                <div class="py-4 my-2">
+                    <span class="display-3 d-inline-block font-weight-bold align-middle">$399</span>
+                </div>
+                <div class="pb-4">
+                    <p class="ui-company-text mb-1">>100 beers</p>
+                    <p class="ui-company-text mb-0">>1000 attendees</p>
+                </div>
+                <p class="ui-company-text text-muted px-5">Perfect for small, exclusive beer festivals with hundreds of attendees</p>
+            </div>
+        </div>
+
+        <div class="d-flex col-md flex-column py-4">
+            <h5 class="m-0">Quarter Barrel</h5>
+            <div class="flex-grow-1">
+                <div class="py-4 my-2">
+                    <span class="display-3 d-inline-block font-weight-bold align-middle">$799</span>
+                </div>
+                <div class="pb-4">
+                    <p class="ui-company-text mb-1">100+ beers</p>
+                    <p class="ui-company-text mb-0">1000+ attendees</p>
+                </div>
+            </div>
+            <p class="ui-company-text text-muted px-5">Our most popular plan for mid-sized beer festivals with 100+ beers and thousands of attendees</p>
+        </div>
+
+        <div class="d-flex col-md flex-column py-4">
+            <h5 class="m-0">Half Barrel</h5>
+            <div class="flex-grow-1">
+                <div class="py-4 my-2">
+                    <span class="display-3 d-inline-block font-weight-bold align-middle">$1299</span>
+                </div>
+                <div class="pb-4">
+                    <p class="ui-company-text mb-1">250+ beers</p>
+                    <p class="ui-company-text mb-0">5000+ attendees</p>
+                </div>
+            </div>
+            <p class="ui-company-text text-muted px-5">For the largest beer festivals, with hundreds of beers and many thousands of attendees</p>
+        </div>
+
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="display-4 text-center">White-Label App Pricing</h4>
+                    <div class="card-text text-center">
+                        <div class="ui-company-text"><b>$200</b> one-time development fee</div>
+                        <div class="ui-company-text"><b>$199</b> yearly maintenance fee</div>
+                        <div class="ui-company-text text-muted mt-2">Promoter is required to open developer accounts for the iOS App Store and Google Play Store, and pay all applicable registration fees.</div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* <!--Festival logo swiper-->
+    <div class="position-relative px-5">
+        <div class="swiper-container w-auto mx-3" id="company-slider-3">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="/img/uikit/logo-1.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-2.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-3.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-4.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-5.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-6.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-7.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-8.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-9.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-10.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+                <div class="swiper-slide"><img src="/img/uikit/logo-11.png" class="img-fluid hoverable ui-img-grayscale" alt></div>
+            </div>
+        </div>
+        <div id="company-slider-3-button-next" class="swiper-button-next custom-icon"><i class="lnr lnr-chevron-right text-lighter"></i></div>
+        <div id="company-slider-3-button-prev" class="swiper-button-prev custom-icon"><i class="lnr lnr-chevron-left text-lighter"></i></div>
+    </div>
+
+    <script>
+        $(function () {
+            new Swiper('#company-slider-3', {
+                slidesPerView: 6,
+                spaceBetween: 30,
+                breakpoints: {
+                    1200: {
+                        slidesPerView: 5,
+                    },
+                    992: {
+                        slidesPerView: 4,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 10,
+                    },
+                    576: {
+                        slidesPerView: 3,
+                        spaceBetween: 0,
+                    },
+                    480: {
+                        slidesPerView: 2,
+                        spaceBetween: 0,
+                    },
+                    380: {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                    }
+                },
+                navigation: {
+                    nextEl: '#company-slider-3-button-next',
+                    prevEl: '#company-slider-3-button-prev'
+                }
+            });
+        });
+    </script>
+    
+        <!--User reviews-->
+    <div class="landing-block container">
+        <h1 class="display-4 text-center pb-3 mb-5">Attendees Love Our Apps!</h1>
+
+        <div class="row">
+            <div class="col-md-6 col-lg-4">
+
+                <div class="rounded ui-bordered p-4 mb-4">
+                    <div class="media mb-3">
+                        <img src="/img/avatars/4-small.png" class="d-block ui-w-40 rounded-circle" alt>
+                        <div class="media-body ml-3">
+                            <strong>Kenneth Frazier</strong><br>
+                            <a href="#" class="text-muted small">example.com</a>
+                        </div>
+                    </div>
+                    <div class="ui-company-text font-weight-light mb-3">
+                        Lorem ipsum dolor sit amet, mel ea molestie erroribus
+                        consequuntur, munere iracundia percipitur ne usu, his
+                        saperet tractatos no.
+                    </div>
+                    <div class="ui-stars">
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6 col-lg-4">
+
+                <div class="rounded ui-bordered p-4 mb-4">
+                    <div class="media mb-3">
+                        <img src="/img/avatars/5-small.png" class="d-block ui-w-40 rounded-circle" alt>
+                        <div class="media-body ml-3">
+                            <strong>Nelle Maxwell</strong><br>
+                            <a href="#" class="text-muted small">xyz.com</a>
+                        </div>
+                    </div>
+                    <div class="ui-company-text font-weight-light mb-3">
+                        Te nusquam erroribus mei, sensibus vulputate posidonium nam an,
+                        ad illud illum vel.
+                    </div>
+                    <div class="ui-stars">
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6 col-lg-4">
+
+                <div class="rounded ui-bordered p-4 mb-4">
+                    <div class="media mb-3">
+                        <img src="/img/avatars/7-small.png" class="d-block ui-w-40 rounded-circle" alt>
+                        <div class="media-body ml-3">
+                            <strong>Alice Hampton</strong><br>
+                            <a href="#" class="text-muted small">Company Inc.</a>
+                        </div>
+                    </div>
+                    <div class="ui-company-text font-weight-light mb-3">
+                        Mea cu quaeque debitis, ut pro graeco insolens, exerci timeam
+                        eos no. Ea eius simul placerat usu, augue delectus nec in.
+                    </div>
+                    <div class="ui-stars">
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                        <div class="ui-star half-filled"><i class="ion ion-md-star"></i><i class="ion ion-md-star"></i></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="#" class="btn btn-outline-primary rounded-pill px-md-4 px-lg-5">More Reviews</a>
+    </div>
+    
+    *@
+
+
+    <div class="landing-block container">
+        <h1 class="display-4 text-center pb-4 mb-5">Frequently Asked Questions</h1>
+
+        <div class="row">
+            <h5 class="mb-2">How much does the mobile app cost?</h5>
+            <p class="ui-company-text text-muted mb-4">The event pricing is per single one-time event, and depends on the number of beers being poured and/or maximum event attendance. White-label apps also require a one-time development fee, as well as a yearly maintenance fee. You can view the pricing above.</p>   
+        </div>
+        
+        <div class="row">
+            <h5 class="mb-2">Do I need any technical knowledge?</h5>
+            <p class="ui-company-text text-muted mb-4">No! We handle all of the development, infrastructure, hosting and support. All you need to do is upload your event information and promote the app to your attendees.</p>   
+        </div>
+        
+        <div class="row">
+            <h5 class="mb-2">What’s the difference between the Prost! app and the white-label app?</h5>
+            <p class="ui-company-text text-muted mb-4">The Prost! app is available on the Apple and Google Play app stores, and lists multiple beer festivals from across North America. The user will search for your event in the app and select it from the event list. One advantage of the Prost! App is that some attendees may already have the app installed from attending other beer festivals.
+            <br />The white-label app is customized with your branding and lists only your events. You will need to publish the app to your company’s app store accounts. (We can provide assistance with this). The white label app also contains additional features, such as the ability to send notifications to your app’s users. You also have the ability to optionally publish your events to the Prost! app for maximum reach.</p>
+        </div>
+        
+        <div class="row">
+            <h5 class="mb-2">Why should I get a mobile app for my beer festival? </h5>
+            <p class="ui-company-text text-muted mb-4">As you are likely aware, the beer festival industry is becoming increasingly competitive. Having a mobile app for your event will provide a memorable guest experience that will set your event apart.<br />
+We believe our app provides an experience that is superior to a printed paper brochure. Have you ever tried reading a festival brochure with one hand while holding a beer with the other? Our app allows attendees to quickly find the beers they want to try, and allows them to check their favorites into Untappd without having to open another app.
+</p>   
+        </div>
+        
+        <div class="row">
+            <h5 class="mb-2">Can you add custom features?
+</h5>
+            <p class="ui-company-text text-muted mb-4">We are always willing to consider any new features that would provide a better experience for our promoters and your event attendees. Unfortunately, we cannot do custom development for individual clients.
+</p>   
+        </div>
+    </div>
+
+    <nav class="footer bg-white">
+        <div class="container d-flex flex-wrap justify-content-between text-center pb-3">
+
+            <div>
+                <a href="#" class="footer-link pt-3">About Us</a>
+                <a href="#" class="footer-link pt-3 ml-4">Help</a>
+                <a href="#" class="footer-link pt-3 ml-4">Contact</a>
+                <a href="#" class="footer-link pt-3 ml-4">Terms &amp; Conditions</a>
+            </div>
+
+            <div class="pt-3">
+                <a href="#" class="footer-text font-weight-bolder">Brand</a> ©
+            </div>
+        </div>
+    </nav>
+
+    <!-- Core scripts -->
+    <script src="/vendor/libs/popper/popper.js"></script>
+    <script src="/vendor/js/bootstrap.js"></script>
+
+    <!-- Libs -->
+    <script src="/vendor/libs/swiper/swiper.js"></script>
+    <script src="/vendor/libs/plyr/plyr.js"></script>
+
+    <!-- Page -->
+    <script src="/js/landing.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,63 @@
+﻿@model Beers
+
+<form id="add-edit-form">
+	<div class="row">
+		<div class="form-group col">
+			<label class="form-label">Beer Name <span class="required">*</span></label>
+			<input class="form-control" asp-for="BeerName" required autocomplete="off" />
+		</div>
+		<div class="form-group col">
+			<label class="form-label">Brewery <span class="required">*</span></label>
+			<input class="form-control" asp-for="Brewery.BreweryName" required autocomplete="off" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col">
+			<label class="form-label">Style <span class="required">*</span></label>
+			<input class="form-control" asp-for="Style" required autocomplete="off" />
+		</div>
+		<div class="form-group col">
+			<label class="form-label">City</label>
+			<input class="form-control" asp-for="Brewery.BreweryCity" autocomplete="off" />
+			<small class="form-text text-muted">City, State (e.g. "Nashville, TN")</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col">
+			<label class="form-label">ABV</label>
+			<input class="form-control" asp-for="Abv" type="number" autocomplete="off" />
+		</div>
+		<div class="form-group col">
+			<label class="form-label">IBU</label>
+			<input class="form-control" asp-for="Ibu" autocomplete="off" />
+		</div>
+		<div class="form-group col">
+			<label class="form-label">Untappd ID</label>
+			<input class="form-control" asp-for="UntappdBeerId" autocomplete="off" />
+			<small class="form-text text-muted">Required for Untappd integration</small>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="form-label">Description</label>
+		<textarea asp-for="Description" class="form-control"></textarea>
+	</div>
+	<div class="row">
+		<div class="form-group col">
+			<label class="form-label">Table Number</label>
+			<input class="form-control" asp-for="Location.TableNumber" min="1" />
+			<small class="form-text text-muted">Pouring stations are sorted in the app by table number</small>
+		</div>
+		<div class="form-group col">
+			<label class="form-label">Alternate Table Name</label>
+			<input class="form-control" asp-for="Location.AlternateName" />
+			<small class="form-text text-muted">If Alternate Table Name is not specified, "Table <i>n</i>" will be used</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col">
+			<label class="form-label">Pour Time</label>
+			<input class="form-control datetimepicker-input" type="text" autocomplete="off" data-toggle="datetimepicker" data-target="#PourTime" name="PourTime" id="PourTime" />
+			<small class="form-text text-muted">Add a pour time if the beer is pouring after the start of the event</small>
+		</div>
+	</div>
+</form>

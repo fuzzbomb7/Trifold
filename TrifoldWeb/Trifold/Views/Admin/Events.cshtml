@@ -1,0 +1,106 @@
+﻿@model List<Trifold.Models.Events>
+@{
+	ViewData["Title"] = "Events";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+}
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"]<a class="btn btn-primary float-right" href="/Admin/Events/Add" role="button">Add New Event</a></h3>
+	<div class="card-body">
+		<div class="mb-3">@if (ViewBag.FilterByPromoter == true) { <text>Showing events for this promoter only.</text> <a href="/Admin/Events" class="link">View all events</a>}</div>
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>Active</th>
+					<th>Event Name</th>
+					<th>Promoter</th>
+					<th>City</th>
+					<th>State</th>
+					<th>Start Time</th>
+					<th>End Time</th>
+					<th>Event URL</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var row in Model)
+				{
+				<tr>
+					<td>@if (row.IsActive)
+					{<i class="fas fa-check" style="color: green"></i>}
+					else {<i class="fas fa-times" style="color: red"></i> }</td>
+					<td><a href="/@row.Id/Event" class="link">@row.EventName</a></td>
+					<td><a href="/Admin/Events?pId=@row.EventPromoter.Id" class="link">@row.EventPromoter.CompanyName</a></td>
+					<td>@row.EventCity</td>
+					<td>@row.EventState</td>
+					<td>@row.EventStartTime</td>
+					<td>@row.EventEndTime</td>
+					<td><a href="@row.EventUrl" target="_blank" class="link">@row.EventUrl</a></td>
+					<td>
+						<a class="btn btn-outline-primary icon-btn btn-xs borderless" href="/Admin/Events/Edit/@row.Id" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+						<a class="btn btn-outline-primary icon-btn btn-xs borderless delete" href="#" title="Delete" data-id="@row.Id" data-name="@row.EventName"><i class="fas fa-times-circle"></i></a>
+					</td>
+				</tr>
+                }
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="delete-modal">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Delete Event</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to delete this event?</p>
+				<p class="font-weight-bold"><span id="event-to-delete"></span></p>
+				<input hidden id="event-id-to-delete" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" id="delete-button">Delete</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#table').DataTable();
+			$('#table').parent().addClass('table-overflow');
+        });
+
+        $('.delete').click(function () {
+            var id = $(this).data("id");
+            var name = $(this).data("name");
+
+            $('#event-to-delete').html(name);
+            $('#event-id-to-delete').val(id);
+
+            $('#delete-modal').modal('show');
+        });
+
+        $('#delete-button').click(function () {
+            var id = $('#event-id-to-delete').val();
+            $.post('/Admin/Events/Delete/' + id,
+                function (data) {
+                    if (data == true) window.location.reload();
+                    else {
+                        $('#delete-modal').modal('hide');
+                        alert('Error deleting event');
+                    }
+				})
+        });
+	</script>
+}

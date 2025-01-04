@@ -1,0 +1,25 @@
+﻿@model Trifold.Models.Apps
+@{
+	ViewData["Title"] = "App Config Download";
+}
+
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"]</h3>
+	<div class="card-body">
+		<dl>
+            <dt>App Name</dt><dd>@Model.AppName</dd>
+            <dt>App Colors</dt><dd>@if (Model.PrimaryColor != null && Model.SecondaryColor != null)
+            { <a class="badge badge-success">OK</a> }
+            else { <a class="badge badge-danger">Incomplete</a> }</dd>
+            <dt>Logo</dt><dd>@if (Model.SplashImageUrl != null)
+            { <a class="badge badge-success">OK</a> }
+            else { <a class="badge badge-danger">Incomplete</a> }</dd>
+            <dt>Icon</dt>@if (Model.AppIconUrl != null)
+            { <a class="badge badge-success">OK</a> }
+            else { <a class="badge badge-danger">Incomplete</a> }
+        </dl>
+
+        <a class="btn btn-default" href="/Admin/Apps/ConfigDownload/@Model.Id">Download App Config</a>
+	</div>
+</div>

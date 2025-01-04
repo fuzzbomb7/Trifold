@@ -1,0 +1,56 @@
+﻿<ul class="nav nav-pills mb-3" id="tabs" role="tablist">
+	<li class="nav-item">
+		<a href="#search" class="nav-link active" id="search-tab" data-toggle="pill" role="tab">Search Untappd</a>
+	</li>
+	<li class="nav-item">
+		<a href="#manual" class="nav-link" id="manual-tab" data-toggle="pill" role="tab">Add Manually</a>
+	</li>
+</ul>
+<div class="tab-content" id="content">
+	<div class="tab-pane fade show active" id="search" role="tabpanel">
+		<!-- Search -->
+		@if (string.IsNullOrWhiteSpace(ViewData["AccessToken"]?.ToString()) && !User.IsInRole("Admin"))
+		{
+			<div class="alert alert-warning"><a href="/Untappd/Auth" class=" alert-link">Login with your Untappd account</a> to search for beers</div>
+		}
+		else
+		{
+			<div class="input-group mb-3 mt-4" style="max-width: 500px">
+				<input class="form-control" type="search" id="beer-search" placeholder="Search by brewery and beer name">
+				<div class="input-group-append">
+					<button class="btn btn-primary" type="submit" id="search-button">Search</button>
+					<button class="btn btn-primary-secondary" type="reset" id="clear-button">Clear</button>
+				</div>
+			</div>
+			<div id="search-results" style="visibility: hidden">
+				<div id="spinner" class="text-center h1"></div>
+				<table id="table" class="table table-bordered">
+					<thead>
+						<tr>
+							<!--Headers-->
+							<th>Label</th>
+							<th>Beer</th>
+							<th>Brewery</th>
+							<th>City</th>
+							<th>Style</th>
+							<th>ABV</th>
+							<th>IBU</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<div class="text-center"><button class="btn btn-primary-secondary" id="load-more">Load More Results</button></div>
+			</div>
+		}
+	</div>
+	<div class="tab-pane fade" id="manual" role="tabpanel">
+		<!--Manual Add-->
+		<div class="col-md-12">
+			@await Html.PartialAsync("_BeerAddEdit")
+			<div class="form-group">
+				<button type="button" id="add-manual" class="btn btn-primary">Add Beer</button>
+			</div>
+		</div>
+	</div>
+</div>

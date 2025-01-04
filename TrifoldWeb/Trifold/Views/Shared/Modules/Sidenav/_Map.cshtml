@@ -1,0 +1,7 @@
+﻿@model Trifold.Models.UserSideNavModel
+
+<li class="sidenav-item@(Model.CurrentPage.Contains("/Map") ? " active" : "")">
+	<a href="/@Model.EventId/Map" class="sidenav-link"><i class="sidenav-icon fas fa-map"></i>
+		<div>Map</div>
+	</a>
+</li>

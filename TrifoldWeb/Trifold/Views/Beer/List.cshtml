@@ -1,0 +1,325 @@
+﻿@model List<Beers>
+@{
+	ViewData["Title"] = "Beer List";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+	<link rel="stylesheet" href="~/vendor/libs/toastr/toastr.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+}
+
+
+<div class="card">
+	<h4 class="card-header">@ViewData["Title"]</h4>
+	<div class="card-body">
+		<div class="alert alert-info alert-dismissible fade show">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="help-text">Check the <b>Beer List</b> table below against your official beer list to ensure that all beers are correct, especially if you've imported your beer list from a CSV file!</div>
+			<div class="help-text">Use the <b>Edit</b> button to add missing information to your beer, or to assign that beer to a pouring station. (To assign all beers from a brewery to a pouring station, see the <a href="@ViewData["EventId"]/Beer/Breweries" class="link"><b>Breweries</b></a> page.)</div>
+			<div>Use the <b>Replace</b> button to manually search Untappd for the correct beer to replace the current beer. To remove a beer from the list, select <b>Delete</b> from the drop-down menu next to the Replace button.</div>
+		</div>
+		<div id="spinner" class="text-center h1"></div>
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>Label</th>
+					<th>Beer</th>
+					<th>Brewery</th>
+					<th>City</th>
+					<th>Style</th>
+					<th>ABV</th>
+					<th>IBU</th>
+					<th>Untappd ID</th>
+					<th>Table #</th>
+					<th>Pour Time</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="edit-modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit Beer</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<input hidden name="Id" id="Id" />
+				@await Html.PartialAsync("_BeerAddEdit")
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="save-edit">Save</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="delete-modal">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Delete Beer</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Do you want to delete this beer?</p>
+				<p class="font-weight-bold"><span id="beer-to-delete"></span></p>
+				<input hidden id="beer-id-to-delete" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" id="delete-button">Delete</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script src="~/vendor/libs/toastr/toastr.js"></script>
+	<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/v2.0.0/dist/latest/bootstrap-autocomplete.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+	<script src="~/vendor/libs/moment/moment.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script>
+
+		var table = null;
+
+		$(document).ready(function () {
+			// Toastr options
+			toastr.options.progressBar = true;
+			toastr.options.timeOut = 3000;
+			toastr.options.positionClass = 'toast-bottom-left';
+
+			$('#spinner').html('<i class="fas fa-spinner fa-spin"></i>');
+
+			$('.datetimepicker-input').datetimepicker({
+				sideBySide: true,
+				stepping: 15,
+				minDate: '@ViewData["EventStartTime"]',
+				defaultDate: '@ViewData["EventStartTime"]',
+            });
+
+            table = $('#table').DataTable({
+                pageLength: 25,
+                autoWidth: false,
+                order: [[2, 'asc']],
+                buttons: [ {
+                        extend: 'csvHtml5',
+						text: 'Export Beer List to CSV',
+						className: 'btn btn-secondary btn-sm ml-5',
+						exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
+						title: '@ViewData["EventName"]'
+                    }
+                ],
+                initComplete: function (settings, json) {
+					table.buttons().container().appendTo('.dataTables_length');
+                },
+                ajax: {
+                    dataSrc: '',
+                    url: "/@ViewData["EventId"]/Beer/GetAll"
+                },
+                columns: [
+                    {
+                        data: 'labelUrl',
+                        render: function (data, type, row, meta) {
+                            if (data !== null) {
+                                return '<img src="' + data + '" height="50" />';
+                            } else {
+                                return '<img src="/images/beericon.png" height="50" />';
+                            }
+                        },
+                        orderable: false
+                    },
+                    { data: 'beerName' },
+                    { data: 'brewery.breweryName' },
+                    { data: 'brewery.breweryCity' },
+                    { data: 'style' },
+                    { data: 'abv' },
+                    { data: 'ibu' },
+                    { data: 'untappdBeerId'},
+                    {
+                        data: 'location.tableNumber',
+                        defaultContent: '',
+                        render: function (data, type, row, meta) {
+                            if (row.location != null && row.location.alternateName != null) {
+                                return data + ' (' + row.location.alternateName + ')';
+                            } else {
+                                return data;
+                            }
+                        },
+					},
+					{
+						data: 'pourTime',
+						render: function (data, type, row, meta) {
+							if (data !== null) return moment(data).format('L LT');
+							else return null;
+						}
+					},
+                    {
+                        data: 'id',
+                        render: function (data, type, row, meta) {
+                            return '<div class="btn-group" role="group"><button class="btn btn-default edit" data-id="' + data + '">Edit</button>' +
+                                '<button class="btn btn-danger replace" data-id="' + data + '" type="button">Replace</button>' +
+								'<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>' +
+								'<div class="dropdown-menu"><a class="dropdown-item delete" data-id="' + data + '" href="#">Delete</a></div></div></div>';
+                        },
+                        orderable: false
+                    }
+                ]
+            });
+
+			$('#table').parent().addClass('table-overflow');
+
+			// DataTables Ajax load event
+			table.on('xhr.dt', function (e, settings, json, xhr) {
+				$('#spinner').html("");
+            });
+
+		});
+
+		// Load Edit modal
+		$('#table').on('click', '.edit', function () {
+			var id = $(this).data('id');
+			$.get("/@ViewData["EventId"]/Beer/Get", { beerId: id },
+				function (data, textStatus, jqXHR) {
+					$('#Brewery_BreweryName').val(data.brewery.breweryName);
+					$('#BeerName').val(data.beerName);
+					$('#Style').val(data.style);
+					$('#Abv').val(data.abv);
+					$('#Ibu').val(data.ibu);
+					$('#Description').val(data.description);
+					$('#Brewery_BreweryCity').val(data.brewery.breweryCity);
+					$('#UntappdBeerId').val(data.untappdBeerId);
+                    $('#Id').val(data.id);
+                    $('#Location_TableNumber').val(data.location && data.location.tableNumber);
+					$('#Location_AlternateName').val(data.location && data.location.alternateName);
+					$('#PourTime').val( data.pourTime != null ? moment(data.pourTime).format('L LT') : null );
+
+					$('#edit-modal').modal('show');
+				},
+				"json"
+			);
+		});
+
+		// Save edit
+		$('#save-edit').click(function () {
+
+			var validate = $('#add-edit-form').validate();
+			var isValid = validate.form();
+
+			if (isValid === false) return;
+
+            var beer = {
+				brewery: {
+                    breweryName: $('#Brewery_BreweryName').val(),
+					breweryCity: $('#Brewery_BreweryCity').val(),
+                },
+				beerName: $('#BeerName').val(),
+				style: $('#Style').val(),
+				abv: $('#Abv').val(),
+				ibu: $('#Ibu').val(),
+				description: $('#Description').val(),
+				untappdBeerId: $('#UntappdBeerId').val(),
+                id: $('#Id').val(),
+				location: { tableNumber: $('#Location_TableNumber').val(), alternateName: $('#Location_AlternateName').val() },
+				pourTime: $('#PourTime').val()
+			};
+
+			$.post("/@ViewData["EventId"]/Beer/Edit", { beer: beer },
+				function (data, textStatus, jqXHR) {
+					if (data === true) {
+						toastr.success("Edited successfully!", `${beer.brewery.breweryName} ${beer.beerName}`);
+
+						$('#Brewery_BreweryName').val('');
+						$('#BeerName').val('');
+						$('#Style').val('');
+						$('#Abv').val('');
+						$('#Ibu').val('');
+						$('#Description').val('');
+						$('#Brewery_BreweryCity').val('');
+						$('#UntappdBeerId').val('');
+                        $('#Id').val('');
+                        $('#Location_TableNumber').val('');
+						$('#Location_AlternateName').val('');
+						$('#PourTime').val('');
+
+                        $('#edit-modal').modal('hide');
+						table.ajax.reload(null, false);
+						setDirty();
+					}
+					else {
+						toastr.error(`Problem editing "${beer.brewery.breweryName} ${beer.beerName}". Please try again.`, "Error");
+					}
+				},
+				"json"
+			);
+		});
+
+		// Load delete modal
+		$('#table').on('click', '.delete', function () {
+			var id = $(this).data('id');
+
+			$.get("/@ViewData["EventId"]/Beer/Get", { beerId: id },
+				function (data, textStatus, jqXHR) {
+					if (data.id > 0) {
+						$('#beer-to-delete').html(`${data.brewery.breweryName} ${data.beerName}`);
+						$('#beer-id-to-delete').val(data.id);
+
+						$('#delete-modal').modal('show');
+					}
+				},
+				"json"
+			);
+		});
+
+		// Delete beer
+		$('#delete-button').click(function () {
+			var toDelete = $('#beer-to-delete').html();
+			var id = $('#beer-id-to-delete').val();
+
+			$.post("/@ViewData["EventId"]/Beer/Delete", { beerId: id },
+				function (data, textStatus, jqXHR) {
+					if (data === true) {
+                        toastr.success("Deleted successfully!", toDelete)
+						table.ajax.reload(null, false);
+						setDirty();
+					} else {
+						toastr.error(`Problem deleting ${toDelete}". Please try again.`, "Error");
+					}
+				},
+				"json"
+			);
+			$('#delete-modal').modal('hide');
+        });
+
+		// Autocomplete table name
+        $('#Location_TableNumber').change(function () {
+            $.get("/@ViewData["EventId"]/Beer/Location/Api/Name", { tableNumber: $(this).val() })
+				.done(function (data) {
+                    $('#Location_AlternateName').val(data);
+				});
+        });
+
+		// Replace button
+        $('#table').on('click', '.replace', function () {
+            var beerId = $(this).data('id');
+            window.location.href = "/@ViewData["EventId"]/Beer/Replace/" + beerId;
+        });
+
+	</script>
+}

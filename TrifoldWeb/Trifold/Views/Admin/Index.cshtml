@@ -1,0 +1,48 @@
+﻿@model List<Trifold.Models.Events>
+@{
+	ViewData["Title"] = "Admin";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+}
+
+<div class="card">
+	<h4 class="card-header">Upcoming Events</h4>
+	<div class="card-body">
+		<div class="float-right"></div>
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>Event</th>
+					<th>Promoter</th>
+					<th>Date</th>
+					<th>Event URL</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var row in Model)
+				{
+					<tr>
+						<td><a href="/@row.Id/Event" class="link">@row.EventName</a></td>
+						<td><a href="/Events?pId=@row.EventPromoterId" class="link">@row.EventPromoter.CompanyName</a></td>
+						<td>@row.EventStartTime</td>
+						<td><a href="@row.EventUrl" target="_blank" class="link">@row.EventUrl</a></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+@section Scripts {
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#table').DataTable();
+			$('#table').parent().addClass('table-overflow');
+		});
+	</script>
+}

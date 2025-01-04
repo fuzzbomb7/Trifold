@@ -1,0 +1,21 @@
+﻿@model Trifold.Models.Apps
+
+@{
+	ViewData["Title"] = "Add New App";
+}
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"]</h3>
+	<div class="card-body">
+		<div asp-validation-summary="All" class="text-danger"></div>
+		<form method="post">
+			<div class="form-group">
+				<label class="form-label">Application Name (Temporary)</label>
+				<input class="form-control" asp-for="AppName" />
+				<input hidden asp-for="ApplicationId" />
+			</div>
+
+			<button class="btn btn-primary" type="submit">Submit</button>
+		</form>
+	</div>
+</div>

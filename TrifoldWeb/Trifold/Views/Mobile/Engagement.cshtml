@@ -1,0 +1,65 @@
+﻿@model Engagement
+
+@{
+    ViewData["Title"] = "Engagement";
+}
+
+@section Styles {
+
+}
+
+<div class="card">
+    <h4 class="card-header">@ViewData["Title"]</h4>
+    <div class="card-body">
+        <div class="col-lg-10 col-xl-8 px-0">
+            <p>Increase attendee engagement by prompting them to follow your social media accounts or join your email list when they view your event in the app. If all fields are left blank, the engagement dialog will not be shown.</p>
+
+            <form method="post">
+                <input asp-for="EventId" hidden />
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="text-danger mb-3">@ViewBag.Error</div>
+                }
+
+                <div class="form-group">
+                    <label class="form-label">Facebook URL</label>
+                    <input class="form-control" type="text" autocomplete="off" asp-for="FacebookUrl" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Facebook URL FBID</label>
+                    <div class="input-group">
+                        <input class="form-control" type="number" autocomplete="off" asp-for="FBID" /><div class="input-group-append">
+                            <a href="https://findmyfbid.com/" target="_blank" class="btn btn-secondary">Find Your FBID</a>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">The FBID is used to open your Facebook page in the Facebook mobile app</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Twitter URL</label>
+                    <input class="form-control" type="text" autocomplete="off" asp-for="TwitterUrl" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Instagram URL</label>
+                    <input class="form-control" type="text" autocomplete="off" asp-for="InstagramUrl" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email List Signup URL</label>
+                    <input class="form-control" type="text" autocomplete="off" asp-for="EmailUrl" />
+                    <small class="form-text text-muted">This URL must go to a page where the user can sign up for your email list</small>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+}

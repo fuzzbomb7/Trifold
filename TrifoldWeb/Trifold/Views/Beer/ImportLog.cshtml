@@ -1,0 +1,84 @@
+﻿@model List<Trifold.Models.BeerCsvRecords>
+@{
+	ViewData["Title"] = "Upload Log";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+
+    <style>
+        .dt-buttons {
+            margin-left: 40px;
+        }
+    </style>
+}
+
+<div class="card">
+	<h4 class="card-header">@ViewData["Title"]</h4>
+	<div class="card-body">
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>Brewery (from CSV)</th>
+					<th>Beer (from CSV)</th>
+                    <th>Untappd ID (from CSV)</th>
+                    <th>Brewery (from Untappd)</th>
+                    <th>Beer (from Untappd)</th>
+                    <th>Added</th>
+                    <th>Source</th>
+					<th>Message</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var row in Model)
+				{
+					<tr>
+						<td>@row.Brewery</td>
+						<td>@row.Beer</td>
+                        <td>@row.UntappdId</td>
+                        <td>@row.UntappdBrewery</td>
+                        <td>@row.UntappdBeer</td>
+                        <td nowrap class="text-center">
+							@if (row.Processed == CsvRecordProcessingEnum.Error)
+							{<i class="fas fa-times-circle" style="color:red"></i><div hidden>No</div> }
+							else
+							{ <i class="fas fa-check" style="color:forestgreen"></i><div hidden>Yes</div>}
+						</td>
+                        <td>@if (row.Processed == CsvRecordProcessingEnum.AddedDirect || row.Processed == CsvRecordProcessingEnum.AddedNotFound)
+                        {
+                            <text>CSV</text>
+                        }
+                        else if(row.Processed == CsvRecordProcessingEnum.AddedUntappd)
+                        {
+                            <text>Untappd</text>
+                        }
+                        </td>
+                        <td>@row.Error</td>
+                        
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts {
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                buttons: [
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-sm',
+                        text: 'Export to CSV',
+                        title: 'Import Log'
+                    }
+                ]
+            }).buttons().container().appendTo('#table_wrapper .dataTables_length');
+
+            $('#table').parent().addClass('table-overflow');
+        });
+	</script>
+}

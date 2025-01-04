@@ -1,0 +1,34 @@
+﻿@{
+	ViewData["Title"] = "Add Beer";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+	<link rel="stylesheet" href="~/vendor/libs/toastr/toastr.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+}
+
+<div class="card">
+	<h4 class="card-header">@ViewData["Title"]</h4>
+	<div class="card-body">
+		@await Html.PartialAsync("_BeerAddNew")
+	</div>
+</div>
+
+@section Scripts {
+
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script src="~/vendor/libs/toastr/toastr.js"></script>
+	<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/v2.0.0/dist/latest/bootstrap-autocomplete.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+	<script src="~/js/addbeer.js"></script>
+	<script src="~/vendor/libs/moment/moment.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script>
+		var eventId = @ViewData["EventId"];		
+		var eventStartTime = '@ViewData["EventStartTime"]';
+	</script>
+}
+
+
+

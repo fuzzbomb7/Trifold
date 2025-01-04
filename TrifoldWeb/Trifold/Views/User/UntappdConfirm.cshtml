@@ -1,0 +1,23 @@
+﻿@model bool
+@{
+	ViewData["Title"] = "Untappd Integration";
+}
+
+<div class="card">
+	<div class="card-body">
+		@if (Model == true)
+		{
+			<h4>Congratulations, your Untappd account is now integrated with Trifold!</h4>
+
+			<p>Now you can search for beers on the Add Beers page and add them manually to your Beer List.</p>
+
+			<a href="/Events" class="btn btn-primary">Return to Events page</a>
+		}
+		else
+		{
+			<p>There was a problem authenticating your Untapped account. Please try again</p>
+		}
+
+
+	</div>
+</div>

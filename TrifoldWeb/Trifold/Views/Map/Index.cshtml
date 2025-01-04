@@ -1,0 +1,597 @@
+﻿@model MapViewModel
+@{
+    ViewData["Title"] = "Edit Map";
+    string eventId = ViewData["EventId"].ToString();
+    string mapFileGuid = System.IO.Path.GetFileNameWithoutExtension(Model.Map?.MapPath);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+    <link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.css" />
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.min.css" />
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="~/vendor/libs/toastr/toastr.css">
+
+    <style>
+        #map {
+            height: 450px;
+            border: 3px solid #ccc;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .default-style .dz-message {
+            font-size: 1rem;
+            margin: 2rem 0;
+        }
+
+        .dropzone, .dz-message {
+            padding: 0;
+        }
+
+        .dz-preview {
+            margin: 1rem;
+        }
+
+        .default-style .dropzone {
+            border: 2px dashed rgba(239, 0, 0, 0.6);
+        }
+
+        div.dataTables_filter {
+            text-align: left !important;
+        }
+
+        #add-x, #add-y, #edit-x, #edit-y {
+            width: 4rem;
+        }
+
+        #add-marker, #edit-marker {
+            display: none;
+        }
+    </style>
+}
+
+@if (Model.Map?.MapPath == null)
+{
+    <div class="col-md-6">
+        <div class="card">
+            <h4 class="card-header">Upload Map</h4>
+            <div class="card-body">
+                <h5>Choose a high-resolution image to use as your event map.</h5>
+                <ul>
+                    <li>The largest dimension should be approximately 1500px</li>
+                    <li>Recommended height is at least 800-1000px</li>
+                    <li>Avoid images where the width is more than 1.5x the height</li>
+                </ul>
+                <form class="dropzone" id="mapUpload"></form>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12 col-lg-6 col-xl-8">
+            <div class="card">
+                <h5 class="card-header">Map <div class="float-right"><button class="btn btn-sm btn-default" id="preview">Mobile Preview &nbsp;<i class="fas fa-window-restore"></i></button></div></h5>
+                <div class="card-body">
+
+                    <div class="mb-3">
+                        <input type="checkbox" data-toggle="toggle" data-on="Hide All Markers" data-off="Show All Markers" class="custom-control-input" id="show-all-markers">
+                        <button class="btn btn-success float-right" id="add-new-marker"><i class="fas fa-plus"></i>&nbsp; Add Marker</button>
+                    </div>
+
+                    <div id="map"><!--Map--></div>
+
+                    <div class="card bg-warning mt-3" id="add-marker">
+                        <div class="card-body">
+                            <h5 class="card-title">Add Marker</h5>
+                            <select class="form-control location-select" id="add-location">
+                                <option></option>
+                            </select>
+                            <div class="form-inline pt-3">
+                                <input class="form-control mr-1" id="add-x" readonly placeholder="X" />
+                                <input class="form-control mr-4" id="add-y" readonly placeholder="Y" />
+                                <div class="ml-auto">
+                                    <button class="btn btn-success mr-1" id="add-ok" disabled>Save & Add Another</button>
+                                    <button class="btn btn-secondary" id="add-cancel">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-warning mt-3" id="edit-marker">
+                        <div class="card-body">
+                            <h5 class="card-title">Edit Marker</h5>
+                            <select class="form-control location-select" id="edit-location">
+                                <option></option>
+                            </select>
+
+                            <div class="form-inline pt-3">
+                                <input class="form-control mr-1" id="edit-x" readonly placeholder="X" />
+                                <input class="form-control mr-4" id="edit-y" readonly placeholder="Y" />
+                                <input hidden id="old-location-id" />
+
+                                <div class="ml-auto">
+                                    <button class="btn btn-danger mr-1" id="edit-ok">Save</button>
+                                    <button class="btn btn-secondary" id="edit-cancel">Cancel</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        @*<button class="btn btn-danger  mt-1" id="clear-data"><i class="fas fa-times"></i>&nbsp; Clear Map Data</button>*@
+                        <a href="#clear" id="clear-data" class="link">Clear Map Data</a>
+                        <span class="float-right"><b>Current Zoom Level: </b><span id="zoom-level">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-6 col-xl-4">
+            <div class="card">
+                <h5 class="card-header">Points of Interest</h5>
+                <div class="card-body">
+                    <table id="table" class="table table-responsive-sm">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="clear-map-modal">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>This will clear your currently uploaded map and all placed markers! Proceed?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No, go back</button>
+                    <button type="button" class="btn btn-danger" id="clear-map-data-button">Yes, clear all data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+
+    @if (Model.Map?.MapPath == null)
+    {
+        <script src="~/vendor/libs/dropzone/dropzone.js"></script>
+        <script>
+			$(document).ready(function () {
+				// File upload
+				Dropzone.options.csvUpload = false;
+				$('form#mapUpload').dropzone({
+					url: '/@eventId/Map/Upload',
+					dictDefaultMessage: "Click or drop file to upload",
+					success: function (file, response) {
+						window.location.reload();
+					},
+					error: function (file, error, xhr) {
+						alert("An error has occurred. Please try again later.");
+					}
+				});
+			});
+        </script>
+    }
+    else
+    {
+        <script src="~/js/leaflet.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+        <script src="~/vendor/libs/select2/select2.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
+		<script src="~/vendor/libs/toastr/toastr.js"></script>
+        <script>
+			var table = null;
+
+			$(document).ready(function () {
+
+				// Toastr options
+				toastr.options.progressBar = true;
+				toastr.options.timeOut = 2000;
+				toastr.options.positionClass = 'toast-bottom-left';
+
+				// Locations table
+				table = $('#table').DataTable({
+					pageLength: 12,
+					autoWidth: false,
+					lengthChange: false,
+					dom: "<'row'<'col-sm-12 col-md-6'f>>" +
+						"<'row'<'col-sm-12'tr>>" +
+						"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+					order: [[1, 'asc']],
+					ajax: {
+						dataSrc: '',
+						url: "/@eventId/Map/GetMarkers"
+					},
+					columns: [
+						{
+							data: function (row, type, set, meta) {
+								return '<button type="button" title="View Marker" class="btn icon-btn btn-sm btn-outline-info view" data-x="' + row.longitude + '" data-y="' + row.latitude + '">' +
+									'<span class="fas fa-eye"></span>' +
+									'</button>';
+                            },
+                            orderable: false
+                        },
+                        {
+                            data: 'tableNumber',
+							title: '#'
+                        },
+						{
+							data: 'location',
+                            className: 'locationName',
+                            title: "Location"
+                        },
+                        {
+							data: function (row, type, set, meta) {
+                                return row.longitude + ', ' + row.latitude;
+                            },
+                            title: "X.Y"
+						},
+						{
+							data: function (row, type, set, meta) {
+								return '<button type="button" title="Edit Marker" class="btn icon-btn btn-sm btn-outline-success edit" data-id="' + row.id + '" data-x="' + row.longitude + '" data-y="' + row.latitude + '">' +
+									'<span class="fas fa-pencil-alt"></span>' + '</button>';
+                            },
+                            orderable: false
+						},
+						{
+							data: function (row, type, set, meta) {
+								return '<button type="button" title="Delete Marker" class="btn icon-btn btn-sm btn-outline-danger delete" data-id="' + row.id + '">' +
+									'<span class="fas fa-times-circle"></span>' +
+									'</button>';
+                            },
+                            orderable: false
+						},
+
+					]
+				});
+			});
+
+			// Location dropdown
+			$('.location-select').select2({
+				placeholder: 'Select a Point of Interest',
+				ajax: {
+					url: '/@eventId/Map/GetLocations',
+				}
+			});
+
+			$('.location-select').on('select2:select', function (e) {
+				$('#add-ok').removeAttr('disabled');
+			});
+
+
+			// Marker icons
+			var dragIcon = L.icon({
+				iconUrl: '/css/images/green-marker.png',
+				iconSize: [48, 48],
+				iconAnchor: [23, 44],
+				popupAnchor: [0, -39],
+			});
+
+			var fixedIcon = L.icon({
+				iconUrl: '/css/images/red-marker.png',
+				iconSize: [48, 48],
+				iconAnchor: [23, 44],
+				popupAnchor: [0, -39],
+			});
+
+			// Map
+			var zoomIncrement = 0.5;
+
+			var map = L.map('map', {
+				crs: L.CRS.Simple,
+				attributionControl: false,
+				zoomDelta: zoomIncrement,
+				zoomSnap: zoomIncrement
+			});
+
+			var mapX = @Model.Map.Width;
+			var mapY = @Model.Map.Height;
+			var bounds = [[0, 0], [mapY, mapX]];
+			var image = L.imageOverlay('@Model.Map.MapPath', bounds).addTo(map);
+			map.setMaxBounds(bounds);
+
+			var mapLargestSide = 0;
+			var windowLargestSide = 0;
+			var windowSize = map.getSize();
+
+			if (mapX >= mapY) {
+				mapLargestSide = mapX;
+				windowLargestSide = windowSize.x;
+			} else {
+				mapLargestSide = mapY;
+				windowLargestSide = windowSize.y;
+			}
+
+			var zoomMult = Math.floor(mapLargestSide / windowLargestSide) + 1;
+			var maxZoom = zoomMult * zoomIncrement;
+
+			map.setMinZoom(-maxZoom);
+			map.setMaxZoom(maxZoom);
+			map.fitBounds(bounds);
+			$('#zoom-level').html(map.getZoom());
+
+			map.on('zoomend', function () {
+				$('#zoom-level').html(map.getZoom());
+			});
+
+			// Marker layer group
+            var addEditMarkers = L.layerGroup().addTo(map);
+            var allMarkers = L.layerGroup().addTo(map);
+
+			// Add new marker
+            $('#add-new-marker').click(function () {
+                addEditMarkers.clearLayers();
+                $('#edit-marker').hide();
+                $('#add-new-marker').hide();
+
+				var dragMarker = L.marker(map.getCenter(), {
+					riseOnHover: true,
+					draggable: true,
+					icon: dragIcon,
+				});
+
+                dragMarker.on('move', dragCoords);
+                addEditMarkers.addLayer(dragMarker);
+                $('#add-marker').show('fast')
+                showAllMarkers();
+			});
+
+			// Get drag coords
+			function dragCoords(e) {
+				var x = Math.floor(e.latlng.lng);
+				var y = Math.floor(e.latlng.lat);
+				$('#add-x').val(x);
+				$('#add-y').val(y);
+				$('#edit-x').val(x);
+				$('#edit-y').val(y);
+			}
+
+			// Cancel add marker
+			$('#add-cancel').click(function () {
+                $('#add-marker').hide('fast');
+                $('#add-new-marker').show();
+				addEditMarkers.clearLayers();
+				// Clear dropdown
+				$('#add-location').val(null).trigger('change');
+				$('#add-x').val('');
+				$('#add-y').val('');
+				$('#add-ok').attr('disabled', true);
+			});
+
+			// Submit add marker
+			$('#add-ok').click(function () {
+                //$('#add-marker').hide('fast');
+                //$('#add-new-marker').show();
+				addEditMarkers.clearLayers();
+
+				var location = $('#add-location').select2('data');
+				var x = $('#add-x').val();
+				var y = $('#add-y').val();
+
+				$.post("/@eventId/Map/AddMarker", { locationId: location[0].id, x: x, y: y },
+					function (data, textStatus, jqXHR) {
+						if (data == false) {
+							alert("There was an error saving your marker. Please try again");
+						}
+						else {
+                            var dragMarker = L.marker(map.getCenter(), {
+					            riseOnHover: true,
+					            draggable: true,
+					            icon: dragIcon,
+				            });
+
+                            dragMarker.on('move', dragCoords);
+                            addEditMarkers.addLayer(dragMarker);
+							table.ajax.reload();
+
+							toastr.success("Added Successfully!", location[0].text);
+							setDirty();
+						}
+					},
+					"json"
+				);
+
+				// Clear dropdown
+				$('#add-location').val(null).trigger('change');
+				$('#add-x').val('');
+				$('#add-y').val('');
+                $('#add-ok').attr('disabled', true);
+			});
+
+			// Edit marker
+			var oldLocationId = 0;
+
+			$('#table').on('click', '.edit', function () {
+				var id = $(this).data('id');
+				var x = $(this).data('x');
+				var y = $(this).data('y');
+				var locationName = $(this).parent('td').siblings('.locationName').html();
+				oldLocationId = id;
+
+				// Select option
+				if ($('#edit-location').find("option[value='" + id + "']").length) {
+					$('#edit-location').val(id).trigger('change');
+				} else {
+					var newOption = new Option(locationName, id, true, true);
+					$('#edit-location').append(newOption).trigger('change');
+				}
+
+				$('#edit-x').val(x);
+				$('#edit-y').val(y);
+				$('#edit-marker').show();
+
+				addEditMarkers.clearLayers();
+                $('#add-marker').hide('fast');
+                $('#add-new-marker').hide();
+				var dragMarker = L.marker([y, x], {
+					riseOnHover: true,
+					draggable: true,
+					icon: dragIcon,
+				});
+				dragMarker.on('move', dragCoords);
+				dragMarker.bindPopup(locationName)
+				addEditMarkers.addLayer(dragMarker);
+                dragMarker.openPopup();
+                showAllMarkers(locationName);
+			});
+
+			// Edit marker submit
+			$('#edit-ok').click(function () {
+				$('#edit-marker').hide('fast');
+                addEditMarkers.clearLayers();
+
+				var location = $('#edit-location').select2('data');
+				var x = $('#edit-x').val();
+				var y = $('#edit-y').val();
+
+				$.post("/@eventId/Map/EditMarker", { locationId: location[0].id, oldLocationId: oldLocationId, x: x, y: y },
+					function (data, textStatus, jqXHR) {
+						if (data == false) {
+							alert("There was an error saving your marker. Please try again");
+						}
+                        else {
+                            showAllMarkers();
+							table.ajax.reload();
+							setDirty();
+						}
+					},
+					"json"
+				);
+
+				// Clear dropdown
+				$('#edit-location').val(null).trigger('change');
+				$('#edit-x').val('');
+                $('#edit-y').val('');
+                $('#add-new-marker').show();
+			});
+
+			// Cancel edit marker
+			$('#edit-cancel').click(function () {
+				$('#edit-marker').hide('fast');
+				addEditMarkers.clearLayers();
+				// Clear dropdown
+				$('#edit-location').val(null).trigger('change');
+				$('#edit-x').val('');
+                $('#edit-y').val('');
+                $('#add-new-marker').show();
+			});
+
+			// Delete marker
+			$('#table').on('click', '.delete', function () {
+				var id = $(this).data('id');
+				$.post("/@eventId/Map/DeleteMarker", { locationId: id },
+					function (data, textStatus, jqXHR) {
+						if (data == false) {
+							alert("There was an error deleting your marker. Please try again");
+						}
+						else {
+							addEditMarkers.clearLayers();
+                            showAllMarkers();
+                            table.ajax.reload();
+                            $('#add-marker').hide('fast');
+                            $('#edit-marker').hide('fast');
+							$('#add-new-marker').show();
+							setDirty();
+						}
+					},
+					"json"
+				);
+			});
+
+			// View marker
+			$('#table').on('click', '.view', function () {
+				var x = $(this).data('x');
+				var y = $(this).data('y');
+				var locationName = $(this).parent('td').siblings('.locationName').html();
+
+				addEditMarkers.clearLayers();
+				var viewMarker = L.marker([y, x], { icon: fixedIcon });
+				viewMarker.bindPopup(locationName)
+				addEditMarkers.addLayer(viewMarker);
+				viewMarker.openPopup();
+                map.setView([y, x], 0);
+
+                $('#add-marker').hide('fast');
+                $('#add-new-marker').show();
+                $('#edit-marker').hide('fast');
+			});
+
+            // Show all markers
+            $('#show-all-markers').change(function () {
+                showAllMarkers();
+            });
+
+            // Show all markers (refresh)
+            function showAllMarkers(skipLocation) {
+                var show = $('#show-all-markers').prop('checked');
+                if (show == true) {
+                    $.get("/@eventId/Map/GetMarkers",
+                        function (data, textStatus, jqXHR) {
+                            if (data == false) {
+                                alert("There was an error showing all markers. Please try again");
+                            }
+                            else {
+                                allMarkers.clearLayers();
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].location == skipLocation) continue;
+                                    var viewMarker = L.marker([data[i].latitude, data[i].longitude], { title: data[i].location, icon: fixedIcon });
+                                    allMarkers.addLayer(viewMarker);
+                                };
+                            }
+                        },
+                        "json"
+                    );
+                } else {
+                    allMarkers.clearLayers();
+                }
+            }
+
+			// Preview
+			$('#preview').click(function () {
+				var xCenter = @Model.Map.Width / 2;
+				var yCenter = @Model.Map.Height / 2;
+				var url = `/@eventId/MapViewer/@mapFileGuid#x=${xCenter}&y=${yCenter}&loc=Point of Interest`;
+				window.open(url, null, "menubar=no,toolbar=no,location=no,personalbar=no,height=800,width=400")
+            });
+
+            // Clear data modal
+            $('#clear-data').click(function () {
+                $('#clear-map-modal').modal('show');
+            });
+
+            // Clear data
+            $('#clear-map-data-button').click(function () {
+                $.post("/@eventId/Map/ClearMapData", { eventId: @eventId },
+					function (data) {
+						if (data == false) {
+							alert("There was an error clearing the map data. Please try again");
+						}
+                        else {
+							location.reload();
+							setDirty();
+						}
+					});
+                $('#clear-map-modal').modal('hide');
+            });
+
+        </script>
+    }
+}

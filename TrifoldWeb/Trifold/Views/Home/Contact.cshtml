@@ -1,0 +1,66 @@
+﻿@{
+	ViewData["Title"] = "Contact Us | Trifold";
+	Layout = "Layouts/_LayoutBlank";
+}
+@section Styles {
+	<!-- Page -->
+	<link rel="stylesheet" href="~/vendor/css/pages/authentication.css">
+	<style>
+		.card hr {
+			border-color: #ccc;
+		}
+
+		.authentication-inner {
+			max-width: 600px !important;
+		}
+		.app-brand-text, .app-brand-logo {
+			display: inline;
+		}
+		.card-header {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+	</style>
+
+}
+
+<div class="authentication-wrapper authentication-2 px-4">
+	<div class="authentication-inner py-5">
+		<!-- Form -->
+		<div class="card shadow" method="post">
+
+				<!-- Logo -->
+				<div class="card-header ">
+					<span class="app-brand-logo">
+						<i class="far fa-map"></i>
+					</span>
+					<span class="app-brand-text ml-1">trifold</span>
+					<h2 class="float-sm-right mt-2">Contact Form</h2>
+				</div>
+
+				<!-- / Logo -->
+				<div class="card-body">
+					<form method="post">
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label class="form-label">Your Name</label>
+								<input type="text" class="form-control" name="name">
+							</div>
+							<div class="form-group col-md-6">
+								<label class="form-label">Email Address</label>
+								<input type="email" class="form-control" name="email">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="form-label">Message</label>
+							<textarea rows="6" class="form-control" name="message"></textarea>
+						</div>
+						<div class="text-danger mb-2">@ViewData["SendResult"]</div>
+						<button type="submit" class="btn btn-primary">Send Message</button>
+					</form>
+				</div>
+
+		</div>
+		<!-- / Form -->
+	</div>
+</div>

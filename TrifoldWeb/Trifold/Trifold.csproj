@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>75c385ab-e386-48ac-adb5-1b00fcea72c1</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/773d3095-6ad3-40ca-9e64-8e2029790e21/resourcegroups/TrifoldWebResourceGroup/providers/microsoft.insights/components/TrifoldWeb</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/773d3095-6ad3-40ca-9e64-8e2029790e21/resourcegroups/TrifoldWebResourceGroup/providers/microsoft.insights/components/TrifoldWeb</ApplicationInsightsAnnotationResourceId>
+    <Configurations>Debug;Release;DebugProd</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\BaseUserController.cs" />
+    <Compile Remove="Data\Migrations\20190226230910_MapsLocationsTable.cs" />
+    <Compile Remove="Data\Migrations\20190226230910_MapsLocationsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190226233231_LocationsEventId.cs" />
+    <Compile Remove="Data\Migrations\20190226233231_LocationsEventId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190404004420_AppsTable.cs" />
+    <Compile Remove="Data\Migrations\20190404004420_AppsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190404004927_AppsTable.cs" />
+    <Compile Remove="Data\Migrations\20190404004927_AppsTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190614201406_PromoLinks.cs" />
+    <Compile Remove="Data\Migrations\20190614201406_PromoLinks.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200325152451_NullableLocations_TableNumber.cs" />
+    <Compile Remove="Data\Migrations\20200325152451_NullableLocations_TableNumber.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200421230358_PwaRewrite.cs" />
+    <Compile Remove="Data\Migrations\20200421230358_PwaRewrite.Designer.cs" />
+    <Compile Remove="Models\AppEvents.cs" />
+    <Compile Remove="Models\Apps.cs" />
+    <Compile Remove="Models\EventStatusModel.cs" />
+    <Compile Remove="Models\JqueryAutocompleteModel.cs" />
+    <Compile Remove="Models\MobileConfig.cs" />
+    <Compile Remove="Models\Ticketing.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="appsettings.DebugProd.json" />
+    <Content Remove="Views\Admin\Apps.cshtml" />
+    <Content Remove="Views\Admin\AppsAdd.cshtml" />
+    <Content Remove="Views\Admin\AppsConfig.cshtml" />
+    <Content Remove="Views\Admin\AppsEdit.cshtml" />
+    <Content Remove="Views\Admin\EventsEdit.cshtml" />
+    <Content Remove="Views\Admin\PromotersEdit.cshtml" />
+    <Content Remove="Views\Admin\_Apps.cshtml" />
+    <Content Remove="Views\Admin\_Events.cshtml" />
+    <Content Remove="Views\Admin\_Promoters.cshtml" />
+    <Content Remove="Views\Admin\_Users.cshtml" />
+    <Content Remove="Views\Beer\Brewery.cshtml" />
+    <Content Remove="Views\Mobile\Ticketing.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_Layout1.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_Layout1Flex.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_Layout2Flex.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_LayoutHorizontalSidenav.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_LayoutWithoutNavbar.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_LayoutWithoutNavbarFlex.cshtml" />
+    <Content Remove="Views\Shared\Layouts\_LayoutWithoutSidenav.cshtml" />
+    <Content Remove="wwwroot\assetdownload\AppConfig_1003.zip" />
+    <Content Remove="wwwroot\assetdownload\AppConfig_2.zip" />
+    <Content Remove="wwwroot\MapViewer.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Dapper" Version="1.60.1" />
+    <PackageReference Include="Google.Cloud.Firestore" Version="1.0.0" />
+    <PackageReference Include="Hangfire" Version="1.6.22" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0-beta4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" PrivateAssets="All" />
+    <PackageReference Include="QRCoder" Version="1.4.1" />
+    <PackageReference Include="Sendgrid" Version="9.10.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
+    <PackageReference Include="Twilio" Version="5.52.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\assetdownload\assets\" />
+    <Folder Include="wwwroot\qrcodes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.DebugProd.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="firestore.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,45 @@
+﻿@model List<Trifold.Models.ApplicationUser>
+
+@{
+	ViewData["Title"] = "Users";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/r-2.2.2/datatables.min.css" />
+}
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"] <a class="btn btn-primary float-right" href="/Admin/Users/Add" role="button">Add New User</a></h3>
+	<div class="card-body">
+		<div class="float-right"></div>
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>User</th>
+					<th>Promoter</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var row in Model)
+				{
+					<tr>
+						<td>@row.UserName</td>
+						<td>@(row.EventPromoter?.CompanyName ?? "Admin")</td>
+						<td><a class="btn btn-outline-primary icon-btn btn-xs borderless" href="/Admin/Users/Remove/@row.Id" title="Remove User"><i class="fas fa-times-circle"></i></a></td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts {
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/r-2.2.2/datatables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#table').DataTable();
+		});
+	</script>
+}

@@ -1,0 +1,22 @@
+﻿@model Trifold.Models.Apps
+
+<form method="post">
+	<div class="form-group">
+		<label class="form-label" class="form-label">Application Name</label>
+		<input class="form-control" asp-for="AppName" />
+		<input hidden asp-for="ApplicationId" />
+	</div>
+
+	@if(Model?.EventPromoters?.Count > 0)
+	{
+		<h5>Promoters</h5>
+		<ul class="list-unstyled ml-4">
+		@foreach(var pro in Model.EventPromoters)
+		{
+			<li><a href="/Admin/Promoters/Edit/@pro.Id" class="link">@pro.CompanyName</a></li>
+		}
+		</ul>
+	}
+
+	<button class="btn btn-primary" type="submit">Submit</button>
+</form>

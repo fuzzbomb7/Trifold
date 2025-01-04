@@ -1,0 +1,12 @@
+﻿@model Trifold.Models.Events
+@{
+	ViewData["Title"] = "Edit Event";
+}
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"]</h3>
+	<div class="card-body">
+		@await Html.PartialAsync("_Events", Model)
+	</div>
+</div>
+

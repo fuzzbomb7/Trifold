@@ -1,0 +1,53 @@
+﻿@model List<Trifold.Models.Apps>
+@{
+	ViewData["Title"] = "Apps";
+}
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.css" />
+}
+
+<div class="card">
+	<h3 class="card-header">@ViewData["Title"] <a class="btn btn-primary float-right" href="/Admin/Apps/Add" role="button">Add New App</a></h3>
+	<div class="card-body">
+		<table id="table" class="table table-bordered">
+			<thead>
+				<tr>
+					<!--Headers-->
+					<th>App Name</th>
+					<th>Application ID</th>
+					<th>Promoter</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var row in Model)
+				{
+				<tr>
+					<td>@row.AppName</td>
+					<td>@row.ApplicationId</td>
+					<td>
+						@if (row.EventPromoters.Count > 1) { @row.EventPromoters.Count <text> Promoters</text> }
+						else if(row.EventPromoters.Count == 1) { <a class="link" href="/Admin/Events?pId=@row.EventPromoters.FirstOrDefault()?.Id">@row.EventPromoters.FirstOrDefault()?.CompanyName</a> }
+					</td>
+					<td>
+                        <a class="btn btn-outline-primary icon-btn btn-xs borderless" href="/Admin/Apps/Edit/@row.Id" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="btn btn-outline-primary icon-btn btn-xs borderless" href="/Admin/Apps/Config/@row.Id" title="Config"><i class="fas fa-cog"></i></a>
+                    </td>
+				</tr>
+				}
+
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts {
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-html5-1.5.4/datatables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#table').DataTable();
+			$('#table').parent().addClass('table-overflow');
+		});
+	</script>
+}

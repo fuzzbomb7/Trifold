@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+	<meta http-equiv="Cache-control" content="public" />
+	<title>Map</title>
+	<link rel="stylesheet" href="css/leaflet.css" />
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		html, body, #map {
+			height: 100%;
+			width: 100vw;
+		}
+	</style>
+</head>
+<body>
+
+
+	<div id="map"></div>
+
+	<script src="js/leaflet.js"></script>
+	<script>
+		// Get hash params
+		var hash = window.location.hash.substr(1);
+
+		var params = hash.split('&').reduce(function (result, item) {
+			var parts = item.split('=');
+			result[parts[0]] = parts[1];
+			return result;
+		}, {});
+
+		var x = params["x"];
+		var y = params["y"];
+		var loc = decodeURI(params["loc"]);
+		var w = params["w"];
+		var h = params["h"];
+		var mapFile = params["map"];
+
+		var zoomIncrement = 0.5;
+
+		var map = L.map('map', {
+			crs: L.CRS.Simple,
+			attributionControl: false,
+			zoomDelta: zoomIncrement,
+			zoomSnap: zoomIncrement
+		});
+
+		var mapX = w;
+		var mapY = h;
+		var bounds = [[0, 0], [mapY, mapX]];
+		var image = L.imageOverlay('/map/' + mapFile, bounds).addTo(map);
+		map.setMaxBounds(bounds);
+
+		var mapLargestSide = 0;
+		var windowLargestSide = 0;
+		var windowSize = map.getSize();
+
+		if (mapX >= mapY) {
+			mapLargestSide = mapX;
+			windowLargestSide = windowSize.x;
+		} else {
+			mapLargestSide = mapY;
+			windowLargestSide = windowSize.y;
+		}
+
+		var zoomMult = Math.floor(mapLargestSide / windowLargestSide) + 1;
+		var maxZoom = zoomMult * zoomIncrement;
+
+		map.setMinZoom(-maxZoom);
+		map.setMaxZoom(maxZoom);
+		map.fitBounds(bounds);
+
+		// Marker layer group
+		var markers = L.layerGroup().addTo(map);
+
+		// Place marker
+		showMarker();
+		//window.onhashchange = showMarker;
+
+		function showMarker() {
+			markers.clearLayers();
+			var viewMarker = L.marker([y, x]);
+			viewMarker.bindPopup(loc);
+			markers.addLayer(viewMarker);
+			viewMarker.openPopup();
+		}
+
+	</script>
+</body>
+</html>
+
+
+
+

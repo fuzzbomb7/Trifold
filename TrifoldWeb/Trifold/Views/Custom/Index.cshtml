@@ -1,0 +1,137 @@
+﻿@model Trifold.Models.CustomContent
+
+@{
+    ViewData["Title"] = "Custom Content";
+}
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+}
+
+<div class="card">
+    <h4 class="card-header">@ViewData["Title"]</h4>
+    <div class="card-body">
+
+        <h5>Set Custom Content URL</h5>
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" class="form-control" asp-for="Url">
+                    <small class="form-text text-muted">Ensure that the specified page will render properly on a mobile device!</small>
+                </div>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" id="save-url">Save</button> <button class="btn btn-default" id="preview-url">Preview</button>
+            </div>
+        </div>
+        <h5>- OR -</h5>
+        <h5>Enter Your Custom HTML Content</h5>
+        <div class="alert alert-info" role="alert">
+          This editor does not currently support image uploads, external javascript files, or style sheets.<br />
+          To view or edit raw HTML, click the <i>Code View</i> button. Only insert the content that goes inside the <span class="text-monospace">&lt;body&gt;</span> tag. 
+          Do not include the <span class="text-monospace">&lt;body&gt;</span>, <span class="text-monospace">&lt;head&gt;</span> or <span class="text-monospace">&lt;html&gt;</span> tags.
+        </div>
+        <div id="editor"></div>
+        <div class="form-group mt-3">
+            <button class="btn btn-primary" id="save-html">Save HTML Content</button> <button class="btn btn-default" id="preview-html">Preview</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="submit-url-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">Use URL instead of HTML content?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="submit-url-modal-btn">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="submit-html-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">Use HTML content instead of URL?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="submit-html-modal-btn">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+    <script>
+		$(document).ready(function () {
+            $('#editor').summernote({
+                height: 300,
+                callbacks: {
+                    onImageUpload: function(files) {
+                        alert("Image upload not currently supported!");
+                    }
+                }
+            });
+
+            $('#editor').summernote('code', '@Html.Raw(Model?.HtmlContent)');
+        });
+
+        // Save URL
+        $('#save-url').click(function () {
+            var code = $('#editor').summernote('code');
+            if (code != '<p><br></p>' || code != '') {
+                $('#submit-url-modal').modal('show');
+            } else {
+                saveUrl();
+            }
+        });
+
+        $('#submit-url-modal-btn').click(function () {
+            saveUrl();
+        });
+
+        function saveUrl() {
+            $.post('/@ViewData["EventId"]/SaveUrl', { url: $('#Url').val() }, function (data) {
+                if (data == true) location.reload();
+                else alert("An error occurred. Please try again later.");
+            });
+        }
+
+        // Save HTML
+        $('#save-html').click(function () {
+            var url = $('#Url').val();
+            if (url != '') {
+                $('#submit-html-modal').modal('show');
+            } else {
+                saveHtml();
+            }
+        });
+
+        $('#submit-html-modal-btn').click(function () {
+            saveHtml();
+        });
+
+        function saveHtml() {
+            var code = $('#editor').summernote('code');
+            $.post('/@ViewData["EventId"]/SaveHtml', { html: code }, function (data) {
+                if (data == true) location.reload();
+                else alert("An error occurred. Please try again later.");
+            });
+        }
+
+        // Preview
+        $('#preview-url').click(function () {
+            var url = $('#Url').val();
+            window.open(url, null, "menubar=no,toolbar=no,location=no,personalbar=no,height=800,width=400");
+        });
+
+        $('#preview-html').click(function () {
+            window.open('/@ViewData["EventId"]/CustomViewer', null, "menubar=no,toolbar=no,location=no,personalbar=no,height=800,width=400");
+        });
+
+    </script>
+}

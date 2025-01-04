@@ -1,0 +1,66 @@
+﻿@model Trifold.Models.UserSideNavModel
+
+<!--Events menu-->
+<li class="sidenav-item@(Model.CurrentPage.Contains("/Events") ? " active" : "")">
+	<a href="/Events" class="sidenav-link"><i class="sidenav-icon fas fa-calendar"></i>Events</a>
+</li>
+
+@{ 
+	string mobileArgs = "";
+	if (Model.EventId != null)
+	{
+		mobileArgs = $"?eventId={Model.EventId}";
+	}
+}
+
+<!--Mobile menu-->
+@if (Model.EventId != null || Model.WhiteLabelId != 0)
+{
+<li class="sidenav-item@(Model.CurrentPage.Contains("/Mobile") ? " active open" : "")">
+	<a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+		<i class="sidenav-icon fas fa-mobile-alt"></i>
+		<div>App</div>
+	</a>
+	<ul class="sidenav-menu">
+		<li class="sidenav-item@(Model.CurrentPage.Contains("/Mobile/Config") ? " active" : "")">
+			<a href="/Mobile/Config@(mobileArgs)" class="sidenav-link">Configuration</a>
+		</li>
+		<!--Show only in event mode-->
+		@if (Model.EventId != null)
+		{
+		<li class="sidenav-item@(Model.CurrentPage.Contains("Promo") ? " active" : "")">
+			<a href="/@Model.EventId/Mobile/Promo" class="sidenav-link">Promotion</a>
+		</li>
+
+        @*<li class="sidenav-item@(Model.CurrentPage.Contains("Engagement") ? " active" : "")">
+			<a href="/@Model.EventId/Mobile/Engagement" class="sidenav-link">Engagement</a>
+		</li>*@
+
+		<li class="sidenav-item@(Model.CurrentPage.Contains("/Mobile/Publish") ? " active" : "")">
+			<a href="/@Model.EventId/Mobile/Publish" class="sidenav-link">Publish</a>
+		</li>
+		}
+	</ul>
+</li>
+}
+
+<!--Modules-->
+@if (Model.Modules?.Contains(ModuleEnum.Beer) == true)
+{
+	@await Html.PartialAsync("Modules/Sidenav/_Beer", Model)
+}
+
+@if (Model.Modules?.Contains(ModuleEnum.Map) == true)
+{
+	@await Html.PartialAsync("Modules/Sidenav/_Map", Model)
+}
+
+@if (Model.Modules?.Contains(ModuleEnum.Custom) == true)
+{
+	<li class="sidenav-item@(Model.CurrentPage.Contains("/Custom") ? " active" : "")">
+	    <a href="/@Model.EventId/Custom" class="sidenav-link"><i class="sidenav-icon fas fa-globe"></i>Custom</a> 
+    </li>
+}
+
+
+	

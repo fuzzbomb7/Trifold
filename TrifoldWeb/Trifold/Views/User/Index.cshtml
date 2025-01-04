@@ -1,0 +1,75 @@
+﻿@model Trifold.Models.EventsPageModel
+@{
+	ViewData["Title"] = "Events";
+}
+
+<div class="col-lg-6 col-md-8">
+	<div class="card" style="margin-bottom: 1rem">
+		<h4 class="card-header">Upcoming Events</h4>
+		<div class="card-body">
+			@foreach(var upcomingEvent in Model.UpcomingEvents)
+			{
+				<div class="card border-secondary" style="margin-bottom: 10px;">
+					<div class="card-body">
+						<h4 class="card-title"><a class="link" href="/@upcomingEvent.Id/Event">@upcomingEvent.EventName</a></h4>
+						<h6 class="card-text">@upcomingEvent.EventStartTime.ToString("f")</h6>
+						<div style="font-size: 1.2rem">
+						@if(upcomingEvent.Modules.Where(x => x.ModuleId == ModuleEnum.Beer).Any())
+						{
+							<i class="fas fa-beer mr-1 text-secondary" title="Beer"></i>
+						}
+						@if(upcomingEvent.Modules.Where(x => x.ModuleId == ModuleEnum.Map).Any())
+						{
+							<i class="fas fa-map mr-1 text-secondary" title="Map"></i>
+						}
+                        @if(upcomingEvent.Modules.Where(x => x.ModuleId == ModuleEnum.Custom).Any())
+						{
+							<i class="fas fa-globe mr-1 text-secondary" title="Custom Content"></i>
+						}
+						</div>
+					</div>
+				</div>
+			}
+
+			@if(Model.UpcomingEvents.Count == 0)
+			{
+				<i>No upcoming events found</i>
+			}
+		</div>
+	</div>
+
+	<div class="card">
+		<h4 class="card-header">Past Events</h4>
+		<div class="card-body">
+			@foreach (var pastEvent in Model.PreviousEvents)
+			{
+				<div class="card border-secondary" style="margin-bottom: 10px;">
+					<div class="card-body">
+						<h4 class="card-title"><a class="link" href="/@pastEvent.Id/Event">@pastEvent.EventName</a></h4>
+						<h6 class="card-text">@pastEvent.EventStartTime.ToLongDateString()</h6>
+                        <div style="font-size: 1.2rem">
+						@if(pastEvent.Modules.Where(x => x.ModuleId == ModuleEnum.Beer).Any())
+						{
+							<i class="fas fa-beer mr-1 text-secondary" title="Beer"></i>
+						}
+						@if(pastEvent.Modules.Where(x => x.ModuleId == ModuleEnum.Map).Any())
+						{
+							<i class="fas fa-map mr-1 text-secondary" title="Map"></i>
+						}
+                        @if(pastEvent.Modules.Where(x => x.ModuleId == ModuleEnum.Custom).Any())
+						{
+							<i class="fas fa-globe mr-1 text-secondary" title="Custom Content"></i>
+						}
+                        </div>
+					</div>
+				</div>
+			}
+
+			@if (Model.PreviousEvents.Count == 0)
+			{
+				<i>No past events found</i>
+			}
+		</div>
+	</div>
+</div>
+

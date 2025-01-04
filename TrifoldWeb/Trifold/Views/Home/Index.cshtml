@@ -1,0 +1,111 @@
+﻿@{ Layout = null; }
+
+<!DOCTYPE html>
+
+<html lang="en" class="default-style">
+<head>
+	<title>Trifold | Mobile Apps for Beer Festivals</title>
+
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+	<!-- Icon fonts -->
+	<link rel="stylesheet" href="/vendor/fonts/ionicons.css">
+	<link rel="stylesheet" href="/vendor/fonts/linearicons.css">
+
+	<!-- Core stylesheets -->
+	<link rel="stylesheet" href="/vendor/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
+	<link rel="stylesheet" href="/vendor/css/rtl/appwork.css" class="theme-settings-appwork-css">
+	<link rel="stylesheet" href="/vendor/css/theme-sunrise.css" />
+	<link rel="stylesheet" href="/vendor/css/rtl/colors.css" class="theme-settings-colors-css">
+	<link rel="stylesheet" href="/vendor/css/rtl/uikit.css">
+	<link rel="stylesheet" href="~/vendor/fonts/fontawesome.css" />
+	<link rel="stylesheet" href="~/css/site.css" />
+
+	<script src="/vendor/js/material-ripple.js"></script>
+	<script src="/vendor/js/layout-helpers.js"></script>
+
+	<!-- Core scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<style>
+		.bg-light {
+			background-color: rgba(24, 28, 33, 0.8) !important;
+		}
+		body {
+			font-size: 1rem;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Wrapper -->
+	<div class="d-flex align-items-stretch w-100 ui-mh-100vh ui-bg-cover ui-bg-overlay-container" style="background-image: url(/images/4-glasses.jpg);">
+		<div class="row no-gutters w-100">
+			<div class="ui-bg-overlay bg-dark opacity-50"></div>
+
+			<div class="d-flex col flex-column text-white px-4 px-sm-5">
+				<div class="text-right mt-3"><a class="text-primary font-weight-bold" href="Login">Login</a></div>
+				<div class="d-flex align-items-center mt-1">
+					<div class="app-brand center">
+						<span class="app-brand-logo pt-1">
+							<i class="far fa-map"></i>
+						</span>
+						<span class="app-brand-text sidenav-text ml-2">trifold</span>
+					</div>
+				</div>
+
+
+				<div class="py-5 my-auto">
+
+					<div class="display-3 text-expanded mb-2">Mobile Apps for</div>
+					<div class="display-1 font-weight-bolder text-expanded">Beer Festivals</div>
+					<div class="display-3 text-expanded mt-2">of all sizes!</div>
+
+					<form class="coming-soon-subscribe mt-5 mb-auto" method="post">
+						<div class="form-row">
+							<div class="col">
+								<input type="text" class="form-control form-control-lg form-control-inverted font-secondary" name="email" placeholder="Enter your email address for updates...">
+							</div>
+							<div class="col-sm-3 mt-2 mt-sm-0">
+								<button type="submit" class="btn btn-primary btn-lg btn-block font-secondary text-expanded px-0">
+									<small class="font-weight-bold">SUBMIT</small>
+								</button>
+							</div>
+						</div>
+						<div class="text-info mt-2 ml-2">@ViewData["SendResult"]</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="d-flex col-lg-5 col-xl-4 align-items-center bg-light py-5 px-4 px-sm-5">
+				<div class="flex-shrink-1">
+					<h5 class="font-weight-bold mb-4 text-primary">ABOUT</h5>
+					<p class="text-white ">
+						We're hard at work on the first cross-platform mobile app for food and beverage festivals.
+						Our mobile app can be customized and branded for your event, and is afforable enough for events of any size!
+					</p>
+					<p class="text-white">We're currently in active development, and are targeting a launch date in the first quarter of 2020.</p>
+
+					<h5 class="font-weight-bold mt-5 mb-4 text-primary">CONTACT</h5>
+					<p class="text-white">For all inquiries, please use the contact form below:</p>
+					<p><i class="ion ion-ios-mail ui-w-40 text-center text-lightest text-big align-middle"></i><a href="Contact" class="align-middle link">Contact Us!</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Core scripts -->
+	<script src="/vendor/libs/popper/popper.js"></script>
+	<script src="/vendor/js/bootstrap.js"></script>
+</body>
+</html>
+
