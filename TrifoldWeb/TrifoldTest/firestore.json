@@ -1,12 +1,12 @@
 ﻿{
 	"type": "service_account",
 	"project_id": "trifold-data",
-	"private_key_id": "4003afc4b295d22d243e511d9cd5edab032a9303",
-	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCtN2LQbpBfmDXb\nwvuAEu8KsguMUgeOSxk88PR+6itz5taRDnzx7KJzGsDNv/m9FiUEpEajJxurHIgy\nvO60/j0/+UYrdRGJRMrNKEbOWarLQSB1rIGWV7M4Y93hyAJu0FAN0RtWUyl6nYlL\nyfdbpvb36U4w/i5VKRuRouSL3H9j1HGNsHrgLytJRjds3hTPeaA05FI0E8+2aI4y\npg9glpN8EMAqdiKqee2vDZabZ/TxhqSLqi7UfScX8RYuz9S1w3f9v/MpZZCs3HaG\n4IHHtqoRh1Nu7m5e3g53ZpqQQIil+PAMykjeXk5lEDBV66RY+oAu88aiMsAuCXfB\nXUVbSGyZAgMBAAECggEABZQcZpdo/ECBW4vdYF6REZ3HqW6VjQugyx781imMhLW7\n1f11dgUnpjVdCENVM7XG3hi8UvzWHfNT9O5eHGN5GC+wXC3vsVAPMqmdaNU9HuwA\ns57T/ZeNehTH90GNx9aFqCxCiSEx23UUuuV3m0gL+X1WEKs0VXchdYCdg7Oc7AYZ\n6TomJuonUjiD53kjjQ/v/5lo95Ykvh+BubHlymuwCrbXUn8xw3FahMywVBDMECQQ\n1mtIRTRDtTpivih+TtoQmxGi34vA2/KMEhDgkZaZW5/ziv2uojL/wMyiz8o5zzh2\nn42fRbXXKUR+eJDcGOg3Zxlel3Hsitxf+j9KxpA40QKBgQDmQ4QcKyB9szxWCWsE\n5S0LMYY20qKdXB3M+cf/EuTxQFGDA2DX9OMf7asOxkEryS3zVvL8/tVvrOmaxjKz\ncSH+Rmgt5QrOcRybwPxDJtcIVn9otdT4hvs32Sgi98ztyqM1t4UzJkbKSP6+yxEl\n1XRHKrTxa6HCiXrmMsxdcL48awKBgQDAk5YMGhgcJ+2lOw4bSr7Jyhw4C616SPU5\nZQ/vb6MalXlz+X8vi1Nz5v/oSXO/gKEF9+UesV2J9LiRLLV+LH1Q/MWA4OcUvvmV\n9+jG0dA8EEJl6z7ILBrhJ37g0otYYHoNdEo9lS/91HgBLm6MNQ2LFzwKUdWPlEYZ\nFQrhD4h8CwKBgQCnlFuBZKGw2dD/jLsmROQTUWesXn+apn/Jvb+gE9ArA/ROtRa2\nFLN3eTEU/5ROmYunnZAaMByFugIJclVT4vIqbHNFc3v54rg/YqQ0+v9kQg9X1X25\nogMTEifzywSJywAdCAMYxrKeZaGAmalRL5gAc0Rcr0h6nDOldTLmjjblIQKBgQCU\n4QR9cqb1DYFR3if3vX9mLZRHV+/TvBepOZJqP1pPMQPmPxquvP3Vet6YzEBp6p2S\nKaW+Zsyz3LfbtD7Tvr1bIS/nhPfhOAtof3I8UvSzmrZaaNXulvpo2sniMaN8vYle\nYWsL1Qx3Jg1ojGb2igVgZKQMLlv2VmEi/vucJxATJQKBgDhDANpVuQwn7KQcm6pf\nbroHCkB+x02YMXNLqVE+O4Q4LxMUiDxBRsf8E2A97KStbXMHhYdzwNtwsnMuNoiD\nKvbUHcaqTYn6IjHqbyd37IgiBmNqW/z+lVeMoaUMvS+gjdJYtQuI1u0fcxkdkqW3\nqUD86fyATwl7Q0XiL5V4nmyC\n-----END PRIVATE KEY-----\n",
-	"client_email": "firebase-adminsdk-zi397@trifold-data.iam.gserviceaccount.com",
-	"client_id": "114382850716758172848",
+	"private_key_id": "",
+	"private_key": "",
+	"client_email": "",
+	"client_id": "",
 	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
 	"token_uri": "https://oauth2.googleapis.com/token",
 	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-zi397%40trifold-data.iam.gserviceaccount.com"
+	"client_x509_cert_url": ""
 }
