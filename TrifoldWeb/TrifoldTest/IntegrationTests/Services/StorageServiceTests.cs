@@ -18,7 +18,7 @@ namespace TrifoldTest.IntegrationTests.Services
         Mock<IConfiguration> configuration;
         StorageService service;
 
-        string connectionString = "DefaultEndpointsProtocol=https;AccountName=trifoldweb;AccountKey=Xt8Wvm+zAErW6bq4RvoDyRGznFk0LBl1TyPT3yUepc+NO5K8+nGlY8gJulRHVFpO6sGGKp45Yom1kpom7WdKLw==;EndpointSuffix=core.windows.net";
+        string connectionString = "";
 
         [SetUp]
         public void SetUp()
